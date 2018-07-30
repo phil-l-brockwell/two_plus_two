@@ -1,8 +1,41 @@
 # frozen_string_literal: true
 
-threads_count = ENV.fetch('RAILS_MAX_THREADS') { 5 }
-threads threads_count, threads_count
+# Default to production
+rails_env = ENV.fetch('RAILS_ENV') { 'production' }
+environment rails_env
 
-port        ENV.fetch('PORT') { 3000 }
-environment ENV.fetch('RAILS_ENV') { 'development' }
-plugin :tmp_restart
+if rails_env == 'production'
+  # Change to match your CPU core count
+  workers 1
+
+  # Min and Max threads per worker
+  threads 1, 6
+  app_dir = File.expand_path('..', __dir__)
+  shared_dir = "#{app_dir}/shared"
+
+  # Set up socket location
+  bind "unix://#{shared_dir}/sockets/puma.sock"
+
+  # Logging
+  stdout_redirect "#{shared_dir}/log/puma.stdout.log", "#{shared_dir}/log/puma.stderr.log", true
+
+  # Set master PID and state locations
+  pidfile "#{shared_dir}/pids/puma.pid"
+  state_path "#{shared_dir}/pids/puma.state"
+  activate_control_app
+
+  on_worker_boot do
+    require 'active_record'
+    begin
+      ActiveRecord::Base.connection.disconnect!
+    rescue StandardError
+      ActiveRecord::ConnectionNotEstablished
+    end
+    ActiveRecord::Base.establish_connection(YAML.load_file("#{app_dir}/config/database.yml")[rails_env])
+  end
+else
+  threads_count = ENV.fetch('RAILS_MAX_THREADS') { 5 }
+  threads threads_count, threads_count
+  port ENV.fetch('PORT') { 3000 }
+  plugin :tmp_restart
+end

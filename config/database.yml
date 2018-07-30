@@ -13,6 +13,10 @@ test:
 
 production:
   <<: *default
+  host: localhost
+  adapter: postgresql
+  encoding: utf8
   database: two_plus_two_production
-  username: two_plus_two
+  pool: 5
+  username: <%= ENV['TWO_PLUS_TWO_DATABASE_USER'] %>
   password: <%= ENV['TWO_PLUS_TWO_DATABASE_PASSWORD'] %>
