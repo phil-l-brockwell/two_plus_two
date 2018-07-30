@@ -3,16 +3,30 @@ import React from "react";
 class PostList extends React.Component {
 	render() {
 		return (
-			<ul>
+			<div className="post-list">
 				{this.props.posts.map((post, i) => {
 					return (
-						<li key={i}>
+						<div
+							className={this.styleStringFor(i)}
+							key={i}
+							onClick={() => this.props.changeCurrentPost(i)}
+						>
 							{post.title}
-						</li>
+						</div>
 					);
 				})}
-			</ul>
-		)
+			</div>
+		);
+	}
+
+	styleStringFor(index) {
+		var s = "post-list-item";
+
+		if (index === this.props.currentIndex) {
+			s += " current-post-list-item";
+		}
+
+		return s;
 	}
 }
 
