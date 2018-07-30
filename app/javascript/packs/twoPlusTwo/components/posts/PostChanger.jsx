@@ -5,7 +5,7 @@ class PostChanger extends React.Component {
 		return (
 			<button
 				className={`post-changer ${this.props.direction}-post-changer`}
-				onClick={this.props.move}
+				onClick={() => this.props.move(this.props.newIndex)}
 			/>
 		);
 	}

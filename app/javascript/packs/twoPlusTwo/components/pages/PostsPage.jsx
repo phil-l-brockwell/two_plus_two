@@ -3,7 +3,6 @@ import axios from "axios";
 import Page from "../pages/Page";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
-import PostChanger from "../posts/PostChanger";
 import LoadingScreen from "../layout/LoadingScreen";
 
 class PostsPage extends Page {
@@ -30,20 +29,24 @@ class PostsPage extends Page {
 		this._fetchPosts();
 	}
 
-	moveBack() {
+	_previousIndex() {
 		if (this.state.index === 0) {
-			return;
+			return this.state.index;
 		}
 
-		this.setState({ index: this.state.index - 1 });
+		return this.state.index - 1;
 	}
 
-	moveForward() {
+	_nextIndex() {
 		if (this.state.index === this.state.posts.length - 1) {
-			return;
+			return this.state.index;
 		}
 
-		this.setState({ index: this.state.index + 1 });
+		return this.state.index + 1;
+	}
+
+	changeCurrentPost(newIndex) {
+		this.setState({ index: newIndex });
 	}
 
 	_currentPost() {
@@ -62,6 +65,9 @@ class PostsPage extends Page {
 				title={currentPost.title}
 				subtitle={currentPost.subtitle}
 				text={currentPost.text}
+				changeCurrentPost={this.changeCurrentPost.bind(this)}
+				previousIndex={this._previousIndex()}
+				nextIndex={this._nextIndex()}
 			/>
 		);
 	}
@@ -69,10 +75,12 @@ class PostsPage extends Page {
 	_content() {
 		return (
 			<div>
+				<PostList
+					posts={this.state.posts}
+					currentIndex={this.state.index}
+					changeCurrentPost={this.changeCurrentPost.bind(this)}
+				/>
 				{this._currentView()}
-				<PostList posts={this.state.posts} currentIndex={this.state.index} />
-				<PostChanger direction={"back"} move={this.moveBack.bind(this)} />
-				<PostChanger direction={"forward"} move={this.moveForward.bind(this)} />
 			</div>
 		);
 	}
