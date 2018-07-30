@@ -4,12 +4,12 @@ import LandingPage from "./components/pages/LandingPage";
 import PostsPage from "./components/pages/PostsPage";
 
 const App = props => (
-	<Router>
-		<div>
-			<Route exact path="/" component={PostsPage} />
-			<Route exact path="/posts" component={PostsPage} />
-		</div>
-	</Router>
+  <Router>
+    <div>
+      <Route exact path="/" component={PostsPage} />
+      <Route exact path="/posts" component={PostsPage} />
+    </div>
+  </Router>
 );
 
 export default App;
