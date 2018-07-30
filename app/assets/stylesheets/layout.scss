@@ -1,0 +1,86 @@
+@import "variables";
+
+.page {
+  min-height: 1000px;
+}
+
+div.content {
+  margin-top: $header-height;
+  z-index: 1;
+  line-height: 25px;
+  letter-spacing: 1px;
+  text-align: center;
+  font-weight: 100;
+  min-height: 1000px;
+}
+
+header {
+  width: 100%;
+  height: $header-height;
+  position: fixed;
+  background-color: black;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid white;
+}
+
+.avatar {
+  height: 80%;
+  float: left;
+  margin: 5px;
+
+  img {
+    border-radius: 50%;
+    opacity: 0.5;
+    height: 100%;
+
+    &:hover { opacity: 1; }
+  }
+}
+
+.header-links {
+  float: right;
+  height: $header-height;
+  line-height: $header-height;
+  margin-right: 20px;
+
+  a {
+    color: $dark-green;
+    margin-left: 10px;
+
+    &:hover {
+      color: $light-green;
+    }
+  }
+}
+
+.email-link {
+  color: $dark-green;
+  font-size: 20px;
+  height: $header-height;
+  line-height: $header-height;
+
+  &:hover {
+    color: $light-green;
+  }
+}
+
+footer {
+  height: $footer-height;
+  background-color: black;
+  width: 100%;
+  border-top: solid 1px white;
+  text-align: center;
+
+  .fa {
+    color: white;
+    margin: 0 10px;
+    height: $footer-height;
+    line-height: $footer-height;
+  }
+
+  .fa-linkedin:hover { color: #4875B4; }
+  .fa-twitter:hover  { color: #55acee; }
+  .fa-github:hover   { color: #333;    }
+  .fa-youtube:hover  { color: #bb0000; }
+}

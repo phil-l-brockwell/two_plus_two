@@ -1,0 +1,89 @@
+// Place all the styles related to the posts controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "variables";
+
+.post {
+	min-height: 1000px;
+
+	.background {
+		background-image: asset-url("banksy-hero.jpg");
+  	background-size: cover;
+ 	 	opacity: 0.4;
+  	position: fixed;
+  	width: 100%;
+  	height: $background-height;
+  	z-index: -1;
+	}
+
+	.headings {
+		z-index: 1;
+  	position: absolute;
+  	width: 100%;
+  	text-align: center;
+  	top: $background-height / 2;
+
+  	h1, h2 { margin: 0 2px 10px 2px; }
+	}
+
+	p {
+		position: absolute;
+		top: $background-height * 1.2;
+		margin: 0 10%;
+	}
+
+	.post-changer {
+    position: absolute;
+    bottom: 0;
+    background-color: $dark-green;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    color: white;
+
+    &:hover {
+    	background-color: $light-green;
+    }
+
+		&.back-post-changer {
+			left: 10px;
+
+			&::after {
+				content: '<';
+			}
+		}
+
+		&.next-post-changer {
+			right: 10px;
+
+			&::after {
+				content: '>';
+			}
+		}
+	}
+}
+
+.post-list {
+	position: absolute;
+	top: $header-height;
+	display: flex;
+	width: 100%;
+	height: $post-list-height;
+	line-height: $post-list-height;
+
+	.post-list-item {
+		width: 25%;
+		cursor: pointer;
+
+		&.current-post-list-item {
+			text-decoration: underline;
+		}
+	}
+}
+
+@media (max-width: 800px) {
+	.post-list {
+		display: none;
+	}
+}
