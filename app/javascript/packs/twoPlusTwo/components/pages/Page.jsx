@@ -1,5 +1,5 @@
 import React from "react";
-import Navigation from "../layout/Navigation";
+import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 
 class Page extends React.Component {
@@ -12,9 +12,9 @@ class Page extends React.Component {
 
 	render() {
 		return (
-			<div>
-				<Navigation />
-				{this._content()}
+			<div className="page">
+				<Header currentUser={this.state.currentUser} />
+				<div className="content">{this._content()}</div>
 				<Footer />
 			</div>
 		);
