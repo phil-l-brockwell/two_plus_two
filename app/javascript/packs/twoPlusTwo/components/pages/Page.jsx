@@ -3,17 +3,10 @@ import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 
 class Page extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      currentUser: null
-    };
-  }
-
   render() {
     return (
       <div className="page">
-        <Header currentUser={this.state.currentUser} />
+        <Header currentUser={this.props.currentUser} />
         <div className="content">{this._content()}</div>
         <Footer />
       </div>
