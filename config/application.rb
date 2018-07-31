@@ -19,5 +19,9 @@ module TwoPlusTwo
   class Application < Rails::Application
     config.load_defaults 5.2
     config.generators.system_tests = nil
+
+    config.to_prepare do
+      DeviseController.respond_to :json
+    end
   end
 end
