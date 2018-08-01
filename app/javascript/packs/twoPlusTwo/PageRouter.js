@@ -8,7 +8,8 @@ class PageRouter extends React.Component {
   constructor() {
     super();
     this.state = {
-      currentUser: null
+      currentUser: null,
+      csrfToken: document.querySelector('meta[name="csrf-token"]').content
     };
   }
 
@@ -16,7 +17,14 @@ class PageRouter extends React.Component {
     axios
       .get("users/current_user")
       .then(response => {
-        this.setState({ currentUser: response.data["user"] });
+        const user = response.data["user"];
+        var email = null;
+
+        if (user) {
+          email = user.email;
+        }
+
+        this.setState({ currentUser: email });
       })
       .catch(error => {
         console.log(error);
@@ -27,6 +35,10 @@ class PageRouter extends React.Component {
     this.getCurrentUser();
   }
 
+  _updateCsrfToken(newToken) {
+    this.setState({ csrfToken: newToken });
+  }
+
   render() {
     return (
       <Router>
@@ -34,12 +46,26 @@ class PageRouter extends React.Component {
           <Route
             exact
             path="/"
-            render={props => <PostsPage currentUser={this.state.currentUser} />}
+            render={props => (
+              <PostsPage
+                currentUser={this.state.currentUser}
+                getCurrentUser={this.getCurrentUser.bind(this)}
+                csrfToken={this.state.csrfToken}
+                updateCsrfToken={this._updateCsrfToken.bind(this)}
+              />
+            )}
           />
           <Route
             exact
             path="/posts"
-            render={props => <PostsPage currentUser={this.state.currentUser} />}
+            render={props => (
+              <PostsPage
+                currentUser={this.state.currentUser}
+                getCurrentUser={this.getCurrentUser.bind(this)}
+                csrfToken={this.state.csrfToken}
+                updateCsrfToken={this._updateCsrfToken.bind(this)}
+              />
+            )}
           />
         </div>
       </Router>
