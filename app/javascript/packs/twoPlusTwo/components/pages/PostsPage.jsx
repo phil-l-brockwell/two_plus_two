@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
-import Page from "../pages/Page";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
 import LoadingScreen from "../layout/LoadingScreen";
+import Header from "../layout/Header";
+import Footer from "../layout/Footer";
 
-class PostsPage extends Page {
+class PostsPage extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -72,15 +73,24 @@ class PostsPage extends Page {
     );
   }
 
-  _content() {
+  render() {
     return (
-      <div>
-        <PostList
-          posts={this.state.posts}
-          currentIndex={this.state.index}
-          changeCurrentPost={this.changeCurrentPost.bind(this)}
+      <div className="page">
+        <Header
+          currentUser={this.props.currentUser}
+          csrfToken={this.props.csrfToken}
+          getCurrentUser={this.props.getCurrentUser}
+          updateCsrfToken={this.props.updateCsrfToken}
         />
-        {this._currentView()}
+        <div className="content">
+          <PostList
+            posts={this.state.posts}
+            currentIndex={this.state.index}
+            changeCurrentPost={this.changeCurrentPost.bind(this)}
+          />
+          {this._currentView()}
+        </div>
+        <Footer />
       </div>
     );
   }

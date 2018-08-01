@@ -1,7 +1,6 @@
 import React from "react";
-import Page from "../pages/Page";
 
-class LandingPage extends Page {
+class LandingPage extends React.Component {
   _content() {
     return <p>This is the home page</p>;
   }
