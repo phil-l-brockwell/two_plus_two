@@ -5,7 +5,8 @@ class LogIn extends React.Component {
   constructor() {
     super();
     this.state = {
-      style: { display: "none" }
+      style: { display: "none" },
+      errorMessage: ""
     };
   }
 
@@ -21,7 +22,7 @@ class LogIn extends React.Component {
         that.props.updateCsrfToken(response.data["authenticity_token"]);
       })
       .catch(function(error) {
-        console.log(error);
+        that.setState({ errorMessage: "Incorrect username or password!" });
       });
   }
 
@@ -37,13 +38,25 @@ class LogIn extends React.Component {
 
   render() {
     return (
-      <div className="login-form" style={this.state.style}>
-        <h2>Log in</h2>
-        <button onClick={this.hide.bind(this)}>Close</button>
+      <div className="modal" style={this.state.style}>
         <form>
-          <input id="email" placeholder="email" />
-          <input id="password" placeholder="password" type="password" />
-          <button onClick={this.handleLogin.bind(this)}>Submit</button>
+          <i
+            className="fa fa-close"
+            aria-hidden="true"
+            onClick={this.hide.bind(this)}
+          />
+          <input id="email" placeholder="enter email..." type="text" />
+          <input
+            id="password"
+            placeholder="enter password..."
+            type="password"
+          />
+          <input
+            onClick={this.handleLogin.bind(this)}
+            value="Log in"
+            type="submit"
+          />
+          <p>{this.state.errorMessage}</p>
         </form>
       </div>
     );
@@ -53,8 +66,12 @@ class LogIn extends React.Component {
     this.setState({ style: { display: "block" } });
   }
 
-  hide() {
-    this.setState({ style: { display: "none" } });
+  hide(e) {
+    if (e) {
+      e.preventDefault();
+    }
+
+    this.setState({ style: { display: "none" }, errorMessage: "" });
   }
 }
 
