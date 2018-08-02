@@ -15,7 +15,7 @@ class PostsPage extends React.Component {
     };
   }
 
-  _fetchPosts() {
+  fetchPosts() {
     axios
       .get("api/posts")
       .then(response => {
@@ -27,7 +27,7 @@ class PostsPage extends React.Component {
   }
 
   componentDidMount() {
-    this._fetchPosts();
+    this.fetchPosts();
   }
 
   _previousIndex() {
@@ -81,6 +81,7 @@ class PostsPage extends React.Component {
           csrfToken={this.props.csrfToken}
           getCurrentUser={this.props.getCurrentUser}
           updateCsrfToken={this.props.updateCsrfToken}
+          fetchPosts={this.fetchPosts.bind(this)}
         />
         <div className="content">
           <PostList

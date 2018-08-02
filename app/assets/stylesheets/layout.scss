@@ -50,6 +50,7 @@ header {
     background-color: transparent;
     border: none;
     height: $header-height;
+    padding: 0;
 
     &:hover {
       color: $light-green;
@@ -107,6 +108,7 @@ footer {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    text-align: center;
 
     .fa-close {
       position: absolute;
@@ -126,7 +128,8 @@ footer {
       color: darkred;
     }
 
-    input {
+    input, textarea {
+      resize: none;
       height: 80px;
       -webkit-box-shadow: 0 0 0 1000px black inset;
       border: none;

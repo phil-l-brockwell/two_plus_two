@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Avatar from "images/avatar.png";
 import SignOut from "../modals/SignOut";
 import LogIn from "../modals/LogIn";
+import PostForm from "../modals/PostForm";
 
 class Header extends React.Component {
   render() {
@@ -20,9 +21,9 @@ class Header extends React.Component {
         </a>
         <div className="header-links">
           <Link to="/posts" className="button">
-            Blog
+            blog
           </Link>
-          {this.userLink()}
+          {this.userLinks()}
         </div>
         <LogIn
           csrfToken={this.props.csrfToken}
@@ -32,18 +33,33 @@ class Header extends React.Component {
             this.logIn = instance;
           }}
         />
+        <PostForm
+          ref={instance => {
+            this.postForm = instance;
+          }}
+          fetchPosts={this.props.fetchPosts}
+        />
       </header>
     );
   }
 
-  userLink() {
+  userLinks() {
     if (this.props.currentUser) {
       return (
-        <SignOut
-          csrfToken={this.props.csrfToken}
-          updateCsrfToken={this.props.updateCsrfToken}
-          getCurrentUser={this.props.getCurrentUser}
-        />
+        <React.Fragment>
+          <button
+            onClick={() => {
+              this.postForm.show();
+            }}
+          >
+            post
+          </button>
+          <SignOut
+            csrfToken={this.props.csrfToken}
+            updateCsrfToken={this.props.updateCsrfToken}
+            getCurrentUser={this.props.getCurrentUser}
+          />
+        </React.Fragment>
       );
     } else {
       return (
@@ -53,7 +69,7 @@ class Header extends React.Component {
             this.logIn.show();
           }}
         >
-          Log in
+          log in
         </button>
       );
     }
