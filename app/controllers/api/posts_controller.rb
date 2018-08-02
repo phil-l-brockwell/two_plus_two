@@ -6,12 +6,14 @@ class Api::PostsController < ApiController
   end
 
   def create
+    return head 401 unless current_user
+
     post = Post.new post_params
 
     if post.save
       render json: { post: post }, status: :ok
     else
-      render json: { error: post.errors }, status: :error
+      render json: {}, status: :unprocessable_entity
     end
   end
 
@@ -22,7 +24,7 @@ class Api::PostsController < ApiController
     if post&.delete
       render json: { message: 'Post successfully deleted!' }, status: :ok
     else
-      render json: { error: "Post with id: #{id} not found!" }, status: :error
+      render json: {}, status: :unprocessable_entity
     end
   end
 

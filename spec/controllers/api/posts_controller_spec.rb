@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe Api::PostsController do
+  include Devise::Test::ControllerHelpers
+
   let(:parsed_response) { (ActiveSupport::JSON.decode response.body).deep_symbolize_keys }
 
   describe '#index' do
@@ -32,6 +34,8 @@ describe Api::PostsController do
 
   describe '#create' do
     context 'success' do
+      before { stub_sign_in }
+
       let(:post_params) { { title: 'Test', subtitle: 'Testing', text: 'Testing' } }
 
       it 'returns a success response' do
@@ -45,15 +49,29 @@ describe Api::PostsController do
     end
 
     context 'error' do
-      let(:post_params) { { title: 'Test', subtitle: 'Testing' } }
+      context 'with invalid params' do
+        let(:post_params) { { title: 'Test', subtitle: 'Testing' } }
 
-      it 'returns an error response' do
-        expect do
-          post :create, params: { post: post_params }
-        end.not_to change { Post.count }
+        before { stub_sign_in }
 
-        expect(response).not_to be_successful
-        expect(parsed_response[:error][:text]).to include('can\'t be blank')
+        it 'returns an error response' do
+          expect do
+            post :create, params: { post: post_params }
+          end.not_to change { Post.count }
+
+          expect(response).not_to be_successful
+        end
+      end
+
+      context 'without no user signed in' do
+        it 'returns a 401 response' do
+          expect do
+            post :create, params: {}
+          end.not_to change { Post.count }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('401')
+        end
       end
     end
   end
@@ -82,7 +100,6 @@ describe Api::PostsController do
           end.not_to change { Post.count }
 
           expect(response).not_to be_successful
-          expect(parsed_response[:error]).to eq("Post with id: #{invalid_id} not found!")
         end
       end
     end
