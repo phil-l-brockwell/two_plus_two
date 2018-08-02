@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 let socialMediaLinks = [
   {
@@ -23,9 +22,9 @@ class Footer extends React.Component {
     return (
       <footer>
         {socialMediaLinks.map((link, i) => (
-          <Link to={link["url"]} key={i}>
+          <a href={link["url"]} key={i}>
             <i className={`fa fa-${link["name"]} fa-lg`} aria-hidden="true" />
-          </Link>
+          </a>
         ))}
       </footer>
     );
