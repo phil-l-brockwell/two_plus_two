@@ -82,10 +82,11 @@ footer {
     line-height: $footer-height;
   }
 
-  .fa-linkedin:hover { color: #4875B4; }
-  .fa-twitter:hover  { color: #55acee; }
-  .fa-github:hover   { color: #333;    }
-  .fa-youtube:hover  { color: #bb0000; }
+  .fa-linkedin:hover       { color: #4875B4; }
+  .fa-twitter:hover        { color: #55acee; }
+  .fa-github:hover         { color: #333;    }
+  .fa-youtube:hover        { color: #bb0000; }
+  .fa-stack-overflow:hover { color: #FF9900 }
 }
 
 .modal {

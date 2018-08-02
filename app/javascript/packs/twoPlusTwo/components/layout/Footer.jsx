@@ -14,6 +14,10 @@ let socialMediaLinks = [
   },
   { name: "twitter",
     url: "https://twitter.com/pokerengineer"
+  },
+  {
+    name: "stack-overflow",
+    url: "https://stackoverflow.com/users/4543415/phil-brockwell"
   }
 ];
 
