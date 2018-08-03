@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Avatar from "images/avatar.png";
-import SignOut from "../modals/SignOut";
+import SignOutButton from "./SignOutButton";
 import Form from "./Form";
 
 const postFields = [{ name: "title" }, { name: "subtitle" }, { name: "text", type: "textarea" }];
@@ -36,7 +36,7 @@ class Header extends React.Component {
           {this.props.currentUser ? (
             <React.Fragment>
               <button onClick={this.togglePostForm.bind(this)}>post</button>
-              <SignOut
+              <SignOutButton
                 csrfToken={this.props.csrfToken}
                 updateCsrfToken={this.props.updateCsrfToken}
                 getCurrentUser={this.props.getCurrentUser}

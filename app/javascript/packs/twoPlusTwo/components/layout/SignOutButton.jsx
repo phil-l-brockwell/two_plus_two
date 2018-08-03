@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-class SignOut extends React.Component {
+class SignOutButton extends React.Component {
   handleLogout(e) {
     e.preventDefault();
     const data = this._payload();
@@ -29,4 +29,4 @@ class SignOut extends React.Component {
   }
 }
 
-export default SignOut;
+export default SignOutButton;
