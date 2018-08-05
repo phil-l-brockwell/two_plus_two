@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import PostsPage from "./components/pages/PostsPage";
 import LandingPage from "./components/pages/LandingPage";
-import Header from './components/layout/Header';
+import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 
 class PageRouter extends React.Component {
@@ -15,30 +15,17 @@ class PageRouter extends React.Component {
             authenticationToken={this.props.authenticationToken}
             updateCurrentUser={this.props.updateCurrentUser}
             updateAuthenticationToken={this.props.updateAuthenticationToken}
-            togglePostForm={this.props.togglePostForm}
             removeCurrentUser={this.props.removeCurrentUser}
           />
           <Route
             exact
             path="/"
-            render={props => (
-              <PostsPage
-                currentUser={this.props.currentUser}
-                showPostForm={this.props.showPostForm}
-                togglePostForm={this.props.togglePostForm}
-              />
-            )}
+            render={props => <PostsPage currentUser={this.props.currentUser} />}
           />
           <Route
             exact
             path="/posts"
-            render={props => (
-              <PostsPage
-                currentUser={this.props.currentUser}
-                showPostForm={this.props.showPostForm}
-                togglePostForm={this.props.togglePostForm}
-              />
-            )}
+            render={props => <PostsPage currentUser={this.props.currentUser} />}
           />
           <Footer />
         </div>

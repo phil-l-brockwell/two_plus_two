@@ -7,8 +7,7 @@ class App extends React.Component {
     super();
     this.state = {
       currentUser: null,
-      authenticationToken: document.querySelector('meta[name="csrf-token"]').content,
-      showPostForm: false
+      authenticationToken: document.querySelector('meta[name="csrf-token"]').content
     };
   }
 
@@ -39,10 +38,6 @@ class App extends React.Component {
     this.setState({ authenticationToken: newToken });
   }
 
-  togglePostForm() {
-    this.setState({ showPostForm: !this.state.showPostForm });
-  }
-
   render() {
     return (
       <PageRouter
@@ -51,8 +46,6 @@ class App extends React.Component {
         removeCurrentUser={this.removeCurrentUser.bind(this)}
         authenticationToken={this.state.authenticationToken}
         updateAuthenticationToken={this.updateAuthenticationToken.bind(this)}
-        showPostForm={this.state.showPostForm}
-        togglePostForm={this.togglePostForm.bind(this)}
       />
     );
   }

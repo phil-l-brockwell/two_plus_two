@@ -29,10 +29,7 @@ class Form extends React.Component {
               onChange={e => this.updateField(e)}
             />
           ))}
-          <input
-            onClick={this.send.bind(this)}
-            type="submit"
-          />
+          <input onClick={this.send.bind(this)} type="submit" />
           <p>{this.state.errorMessage}</p>
         </form>
       </div>

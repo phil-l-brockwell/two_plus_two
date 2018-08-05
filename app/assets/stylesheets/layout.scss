@@ -58,6 +58,32 @@ header {
   }
 }
 
+.admin-controls {
+  position: absolute;
+  top: $background-height;
+  left: 0;
+  background-color: black;
+  width: 100%;
+  height: $header-height;
+  line-height: $header-height;
+  text-align: right;
+  border-bottom: 1px solid #044A0B;
+
+  button {
+    margin: 0 20px;
+    color: $dark-green;
+    margin-left: 10px;
+    background-color: transparent;
+    border: none;
+    height: $header-height;
+    padding: 0;
+
+    &:hover {
+      color: $light-green;
+    }
+  }
+}
+
 .email-link {
   color: $dark-green;
   font-size: 20px;

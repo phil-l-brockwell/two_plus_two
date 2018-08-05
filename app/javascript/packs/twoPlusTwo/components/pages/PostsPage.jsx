@@ -4,6 +4,7 @@ import Post from "../posts/Post";
 import PostList from "../posts/PostList";
 import LoadingScreen from "../layout/LoadingScreen";
 import Form from "../layout/Form";
+import AdminControls from "../layout/AdminControls";
 
 const postFields = [
   { name: "title" },
@@ -16,7 +17,8 @@ class PostsPage extends React.Component {
     super();
     this.state = {
       posts: [],
-      index: 0
+      index: 0,
+      showPostForm: false
     };
   }
 
@@ -64,6 +66,10 @@ class PostsPage extends React.Component {
     this.setState({ posts: posts });
   }
 
+  togglePostForm() {
+    this.setState({ showPostForm: !this.state.showPostForm });
+  }
+
   render() {
     return (
       <div className="content">
@@ -84,10 +90,15 @@ class PostsPage extends React.Component {
         ) : (
           <LoadingScreen />
         )}
-        {this.props.showPostForm ? (
+        {this.props.currentUser && this.props.currentUser.admin ? (
+          <AdminControls>
+            <button onClick={this.togglePostForm.bind(this)}>post</button>
+          </AdminControls>
+        ) : null}
+        {this.state.showPostForm ? (
           <Form
             callback={this.updatePosts.bind(this)}
-            toggle={this.props.togglePostForm}
+            toggle={this.togglePostForm.bind(this)}
             url="/api/posts"
             resource="post"
             fields={postFields}
