@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
-import LoadingScreen from "../layout/LoadingScreen";
 import Form from "../layout/Form";
 import AdminControls from "../layout/AdminControls";
 
@@ -20,6 +19,7 @@ class PostsPage extends React.Component {
       index: 0,
       showPostForm: false
     };
+    this.loadingPost = { title: "Loading..." };
   }
 
   fetchPosts() {
@@ -78,18 +78,12 @@ class PostsPage extends React.Component {
           currentIndex={this.state.index}
           changeCurrentPost={this.changeCurrentPost.bind(this)}
         />
-        {this.currentPost() ? (
-          <Post
-            title={this.currentPost().title}
-            subtitle={this.currentPost().subtitle}
-            text={this.currentPost().text}
-            changeCurrentPost={this.changeCurrentPost.bind(this)}
-            previousIndex={this.previousIndex()}
-            nextIndex={this.nextIndex()}
-          />
-        ) : (
-          <LoadingScreen />
-        )}
+        <Post
+          post={this.currentPost() || this.loadingPost}
+          changeCurrentPost={this.changeCurrentPost.bind(this)}
+          previousIndex={this.previousIndex()}
+          nextIndex={this.nextIndex()}
+        />
         {this.props.currentUser && this.props.currentUser.admin ? (
           <AdminControls>
             <button onClick={this.togglePostForm.bind(this)}>post</button>

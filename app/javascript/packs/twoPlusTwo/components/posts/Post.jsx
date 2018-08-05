@@ -3,10 +3,6 @@ import PostChanger from "../posts/PostChanger";
 import BackgroundImage from "images/banksy-hero.jpg";
 
 class Post extends React.Component {
-  constructor() {
-    super();
-  }
-
   render() {
     return (
       <div className="post">
@@ -17,15 +13,15 @@ class Post extends React.Component {
             move={this.props.changeCurrentPost.bind(this)}
             newIndex={this.props.previousIndex}
           />
-          <h1>{this.props.title}</h1>
-          <h2>{this.props.subtitle}</h2>
+          <h1>{this.props.post.title}</h1>
+          <h2>{this.props.post.subtitle}</h2>
           <PostChanger
             direction={"next"}
             move={this.props.changeCurrentPost.bind(this)}
             newIndex={this.props.nextIndex}
           />
         </div>
-        <p>{this.props.text}</p>
+        <p>{this.props.post.text}</p>
       </div>
     );
   }
