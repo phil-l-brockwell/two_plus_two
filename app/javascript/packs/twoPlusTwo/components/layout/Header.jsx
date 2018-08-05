@@ -4,16 +4,15 @@ import Avatar from "images/avatar.png";
 import SignOutButton from "./SignOutButton";
 import Form from "./Form";
 
-const postFields = [{ name: "title" }, { name: "subtitle" }, { name: "text", type: "textarea" }];
 const userFields = [{ name: "email" }, { name: "password", type: "password" }];
 
 class Header extends React.Component {
   constructor() {
     super();
     this.state = {
-      showPostForm: false,
       showLoginForm: false
     };
+    this.toggleLoginForm = this.toggleLoginForm.bind(this);
   }
 
   render() {
@@ -35,45 +34,32 @@ class Header extends React.Component {
           </Link>
           {this.props.currentUser ? (
             <React.Fragment>
-              <button onClick={this.togglePostForm.bind(this)}>post</button>
+              <button onClick={this.props.togglePostForm}>post</button>
               <SignOutButton
-                csrfToken={this.props.csrfToken}
-                updateCsrfToken={this.props.updateCsrfToken}
-                getCurrentUser={this.props.getCurrentUser}
+                authenticationToken={this.props.authenticationToken}
+                updateAuthenticationToken={this.props.updateAuthenticationToken}
+                callback={this.props.removeCurrentUser}
               />
             </React.Fragment>
           ) : (
-            <button className="button" onClick={this.toggleLoginForm.bind(this)}>
+            <button className="button" onClick={this.toggleLoginForm}>
               log in
             </button>
           )}
         </div>
         {this.state.showLoginForm ? (
           <Form
-            authenticityToken={this.props.csrfToken}
-            updateCsrfToken={this.props.updateCsrfToken}
-            callback={this.props.getCurrentUser}
-            toggle={this.toggleLoginForm.bind(this)}
+            authenticityToken={this.props.authenticationToken}
+            updateAuthenticationToken={this.props.updateAuthenticationToken}
+            callback={this.props.updateCurrentUser}
+            toggle={this.toggleLoginForm}
             url="/users/sign_in.json"
             resource="user"
             fields={userFields}
           />
         ) : null}
-        {this.state.showPostForm ? (
-          <Form
-            callback={this.props.fetchPosts}
-            toggle={this.togglePostForm.bind(this)}
-            url="/api/posts"
-            resource="post"
-            fields={postFields}
-          />
-        ) : null}
       </header>
     );
-  }
-
-  togglePostForm() {
-    this.setState({ showPostForm: !this.state.showPostForm });
   }
 
   toggleLoginForm() {

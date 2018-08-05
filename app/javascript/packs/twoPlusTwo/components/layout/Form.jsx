@@ -48,10 +48,9 @@ class Form extends React.Component {
       .then(function(response) {
         const token = response.data["authenticity_token"];
         if (token) {
-          that.props.updateCsrfToken(token);
+          that.props.updateAuthenticationToken(token);
         }
-        that.props.callback();
-        that.clear();
+        that.props.callback(response);
         that.props.toggle();
       })
       .catch(function(response) {
@@ -59,18 +58,18 @@ class Form extends React.Component {
       });
   }
 
+  componentWillUnMount() {
+    this.setState({
+      fields: this.initFields(this.props.fields),
+      errorMessage: ""
+    });
+  }
+
   initFields(fields) {
     return fields.reduce((obj, item) => {
       obj[item["name"]] = "";
       return obj;
     }, {});
-  }
-
-  clear() {
-    this.setState({
-      fields: this.initFields(this.props.fields),
-      errorMessage: ""
-    });
   }
 
   updateField(e) {

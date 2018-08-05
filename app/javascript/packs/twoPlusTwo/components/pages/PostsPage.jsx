@@ -3,8 +3,13 @@ import axios from "axios";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
 import LoadingScreen from "../layout/LoadingScreen";
-import Header from "../layout/Header";
-import Footer from "../layout/Footer";
+import Form from "../layout/Form";
+
+const postFields = [
+  { name: "title" },
+  { name: "subtitle" },
+  { name: "text", type: "textarea" }
+];
 
 class PostsPage extends React.Component {
   constructor() {
@@ -30,19 +35,17 @@ class PostsPage extends React.Component {
     this.fetchPosts();
   }
 
-  _previousIndex() {
+  previousIndex() {
     if (this.state.index === 0) {
       return this.state.index;
     }
-
     return this.state.index - 1;
   }
 
-  _nextIndex() {
+  nextIndex() {
     if (this.state.index === this.state.posts.length - 1) {
       return this.state.index;
     }
-
     return this.state.index + 1;
   }
 
@@ -50,48 +53,46 @@ class PostsPage extends React.Component {
     this.setState({ index: newIndex });
   }
 
-  _currentPost() {
+  currentPost() {
     return this.state.posts[this.state.index];
   }
 
-  _currentView() {
-    let currentPost = this._currentPost();
-
-    if (!currentPost) {
-      return <LoadingScreen />;
-    }
-
-    return (
-      <Post
-        title={currentPost.title}
-        subtitle={currentPost.subtitle}
-        text={currentPost.text}
-        changeCurrentPost={this.changeCurrentPost.bind(this)}
-        previousIndex={this._previousIndex()}
-        nextIndex={this._nextIndex()}
-      />
-    );
+  updatePosts(response) {
+    var newPost = response["data"]["post"];
+    var posts = this.state.posts.slice();
+    posts.push(newPost);
+    this.setState({ posts: posts });
   }
 
   render() {
     return (
-      <div className="page">
-        <Header
-          currentUser={this.props.currentUser}
-          csrfToken={this.props.csrfToken}
-          getCurrentUser={this.props.getCurrentUser}
-          updateCsrfToken={this.props.updateCsrfToken}
-          fetchPosts={this.fetchPosts.bind(this)}
+      <div className="content">
+        <PostList
+          posts={this.state.posts}
+          currentIndex={this.state.index}
+          changeCurrentPost={this.changeCurrentPost.bind(this)}
         />
-        <div className="content">
-          <PostList
-            posts={this.state.posts}
-            currentIndex={this.state.index}
+        {this.currentPost() ? (
+          <Post
+            title={this.currentPost().title}
+            subtitle={this.currentPost().subtitle}
+            text={this.currentPost().text}
             changeCurrentPost={this.changeCurrentPost.bind(this)}
+            previousIndex={this.previousIndex()}
+            nextIndex={this.nextIndex()}
           />
-          {this._currentView()}
-        </div>
-        <Footer />
+        ) : (
+          <LoadingScreen />
+        )}
+        {this.props.showPostForm ? (
+          <Form
+            callback={this.updatePosts.bind(this)}
+            toggle={this.props.togglePostForm}
+            url="/api/posts"
+            resource="post"
+            fields={postFields}
+          />
+        ) : null}
       </div>
     );
   }

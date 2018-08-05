@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import PageRouter from "./PageRouter";
+import App from "./App";
 
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(<PageRouter />, document.getElementById("two-plus-two"));
+  ReactDOM.render(<App />, document.getElementById("two-plus-two"));
 });
