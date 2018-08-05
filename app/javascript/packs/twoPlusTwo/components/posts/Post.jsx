@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import PostChanger from "../posts/PostChanger";
 import BackgroundImage from "images/banksy-hero.jpg";
 
@@ -26,5 +27,16 @@ class Post extends React.Component {
     );
   }
 }
+
+Post.defaultProps = {
+  post: { title: "Loading..." }
+};
+
+Post.propTypes = {
+  changeCurrentPost: PropTypes.func.isRequired,
+  previousIndex: PropTypes.number.isRequired,
+  nextIndex: PropTypes.number.isRequired,
+  post: PropTypes.object
+};
 
 export default Post;

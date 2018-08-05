@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 class LandingPage extends React.Component {
   render() {
@@ -8,6 +9,10 @@ class LandingPage extends React.Component {
   		</div>
   	)
   }
+}
+
+LandingPage.propTypes = {
+  currentUser: PropTypes.object
 }
 
 export default LandingPage;

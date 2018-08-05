@@ -1,15 +1,10 @@
 import React from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
 import Form from "../layout/Form";
 import AdminControls from "../layout/AdminControls";
-
-const postFields = [
-  { name: "title" },
-  { name: "subtitle" },
-  { name: "text", type: "textarea" }
-];
 
 class PostsPage extends React.Component {
   constructor() {
@@ -19,7 +14,11 @@ class PostsPage extends React.Component {
       index: 0,
       showPostForm: false
     };
-    this.loadingPost = { title: "Loading..." };
+    this.postFields = [
+      { name: "title" },
+      { name: "subtitle" },
+      { name: "text", type: "textarea" }
+    ];
   }
 
   fetchPosts() {
@@ -79,7 +78,7 @@ class PostsPage extends React.Component {
           changeCurrentPost={this.changeCurrentPost.bind(this)}
         />
         <Post
-          post={this.currentPost() || this.loadingPost}
+          post={this.currentPost()}
           changeCurrentPost={this.changeCurrentPost.bind(this)}
           previousIndex={this.previousIndex()}
           nextIndex={this.nextIndex()}
@@ -95,12 +94,16 @@ class PostsPage extends React.Component {
             toggle={this.togglePostForm.bind(this)}
             url="/api/posts"
             resource="post"
-            fields={postFields}
+            fields={this.postFields}
           />
         ) : null}
       </div>
     );
   }
 }
+
+PostsPage.propTypes = {
+  currentUser: PropTypes.object
+};
 
 export default PostsPage;

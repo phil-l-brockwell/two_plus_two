@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 class PostChanger extends React.Component {
   render() {
@@ -10,5 +11,10 @@ class PostChanger extends React.Component {
     );
   }
 }
+
+PostChanger.propTypes = {
+  direction: PropTypes.oneOf(["back", "next"]).isRequired,
+  newIndex: PropTypes.number.isRequired
+};
 
 export default PostChanger;

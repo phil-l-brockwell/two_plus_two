@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import PropTypes from "prop-types";
 import PostsPage from "./components/pages/PostsPage";
 import LandingPage from "./components/pages/LandingPage";
 import Header from "./components/layout/Header";
@@ -33,5 +34,13 @@ class PageRouter extends React.Component {
     );
   }
 }
+
+PageRouter.propTypes = {
+  currentUser: PropTypes.object,
+  authenticationToken: PropTypes.string.isRequired,
+  updateCurrentUser: PropTypes.func.isRequired,
+  updateAuthenticationToken: PropTypes.func.isRequired,
+  removeCurrentUser: PropTypes.func.isRequired
+};
 
 export default PageRouter;

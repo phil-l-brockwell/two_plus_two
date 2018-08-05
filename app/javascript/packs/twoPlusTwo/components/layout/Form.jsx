@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 import Input from "../layout/Input";
 
 class Form extends React.Component {
@@ -84,6 +85,16 @@ class Form extends React.Component {
       authenticity_token: this.props.authenticityToken
     };
   }
+}
+
+Form.propTypes = {
+  callback: PropTypes.func,
+  toggle: PropTypes.func.isRequired,
+  url: PropTypes.string.isRequired,
+  resource: PropTypes.string.isRequired,
+  fields: PropTypes.array.isRequired,
+  authenticityToken: PropTypes.string,
+  updateAuthenticationToken: PropTypes.func
 }
 
 export default Form;

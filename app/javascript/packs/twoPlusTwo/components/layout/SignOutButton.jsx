@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import PropTypes from 'prop-types';
 
 class SignOutButton extends React.Component {
   handleLogout(e) {
@@ -27,6 +28,11 @@ class SignOutButton extends React.Component {
   render() {
     return <button onClick={this.handleLogout.bind(this)}>sign out</button>;
   }
+}
+
+SignOutButton.propTypes = {
+  authenticationToken: PropTypes.string.isRequired,
+  updateAuthenticationToken: PropTypes.func.isRequired
 }
 
 export default SignOutButton;
