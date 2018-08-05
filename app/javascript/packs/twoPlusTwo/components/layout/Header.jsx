@@ -32,15 +32,15 @@ class Header extends React.Component {
           <Link to="/posts" className="button">
             blog
           </Link>
+          {this.props.currentUser && this.props.currentUser.admin ? (
+            <button onClick={this.props.togglePostForm}>post</button>
+          ) : null}
           {this.props.currentUser ? (
-            <React.Fragment>
-              <button onClick={this.props.togglePostForm}>post</button>
-              <SignOutButton
-                authenticationToken={this.props.authenticationToken}
-                updateAuthenticationToken={this.props.updateAuthenticationToken}
-                callback={this.props.removeCurrentUser}
-              />
-            </React.Fragment>
+            <SignOutButton
+              authenticationToken={this.props.authenticationToken}
+              updateAuthenticationToken={this.props.updateAuthenticationToken}
+              callback={this.props.removeCurrentUser}
+            />
           ) : (
             <button className="button" onClick={this.toggleLoginForm}>
               log in

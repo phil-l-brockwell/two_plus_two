@@ -16,14 +16,7 @@ class App extends React.Component {
     axios
       .get("users/current_user")
       .then(response => {
-        const user = response.data["user"];
-        var email = null;
-
-        if (user) {
-          email = user.email;
-        }
-
-        this.setState({ currentUser: email });
+        this.updateCurrentUser(response);
       })
       .catch(error => {
         console.log(error);
@@ -31,14 +24,7 @@ class App extends React.Component {
   }
 
   updateCurrentUser(response) {
-    const user = response.data["user"];
-    var email = null;
-
-    if (user) {
-      email = user.email;
-    }
-
-    this.setState({ currentUser: email });
+    this.setState({ currentUser: response.data["user"] });
   }
 
   removeCurrentUser() {
