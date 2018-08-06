@@ -137,6 +137,10 @@ footer {
     justify-content: space-evenly;
     text-align: center;
 
+    &.post-form {
+      width: 80%;
+    }
+
     .fa-close {
       position: absolute;
       top: 10px;

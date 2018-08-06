@@ -15,7 +15,7 @@ class Form extends React.Component {
   render() {
     return (
       <div className="modal">
-        <form>
+        <form className={`${this.props.resource}-form`}>
           <i
             className="fa fa-close"
             aria-hidden="true"
