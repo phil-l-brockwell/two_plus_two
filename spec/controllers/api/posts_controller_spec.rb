@@ -6,6 +6,7 @@ describe Api::PostsController do
   include Devise::Test::ControllerHelpers
 
   let(:parsed_response) { (ActiveSupport::JSON.decode response.body).deep_symbolize_keys }
+  let(:admin_user) { FactoryBot.create(:user, admin: true) }
 
   describe '#index' do
     context 'no posts' do
@@ -33,10 +34,10 @@ describe Api::PostsController do
   end
 
   describe '#create' do
-    context 'success' do
-      before { stub_sign_in }
+    let(:post_params) { { title: 'Test', subtitle: 'Testing', text: 'Testing' } }
 
-      let(:post_params) { { title: 'Test', subtitle: 'Testing', text: 'Testing' } }
+    context 'success' do
+      before { stub_sign_in admin_user }
 
       it 'returns a success response' do
         expect do
@@ -52,7 +53,7 @@ describe Api::PostsController do
       context 'with invalid params' do
         let(:post_params) { { title: 'Test', subtitle: 'Testing' } }
 
-        before { stub_sign_in }
+        before { stub_sign_in admin_user }
 
         it 'returns an error response' do
           expect do
@@ -63,11 +64,77 @@ describe Api::PostsController do
         end
       end
 
-      context 'without no user signed in' do
+      context 'without a user signed in' do
         it 'returns a 401 response' do
           expect do
             post :create, params: {}
           end.not_to change { Post.count }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('401')
+        end
+      end
+
+      context 'with an non admin user signed in' do
+        before { stub_sign_in }
+
+        it 'returns a 401 response' do
+          expect do
+            post :create, params: { post: post_params }
+          end.not_to change { Post.count }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('401')
+        end
+      end
+    end
+  end
+
+  describe '#update' do
+    let(:post) { FactoryBot.create(:post) }
+    let(:new_params) { { title: 'A new beginning', subtitle: 'This is it', text: '2+2' } }
+
+    context 'success' do
+      before { stub_sign_in admin_user }
+
+      it 'returns a success response' do
+        patch :update, params: { id: post.id, post: new_params }
+
+        post.reload
+
+        expect(response).to be_successful
+        expect(post.title).to eq(new_params[:title])
+        expect(post.subtitle).to eq(new_params[:subtitle])
+        expect(post.text).to eq(new_params[:text])
+      end
+    end
+
+    context 'error' do
+      context 'with an invalid post id' do
+        before { stub_sign_in admin_user }
+
+        it 'returns a 422 response' do
+          patch :update, params: { id: post.id + 1, post: new_params }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('422')
+        end
+      end
+
+      context 'without a user signed in' do
+        it 'returns a 401 response' do
+          patch :update, params: { id: post.id, post: new_params }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('401')
+        end
+      end
+
+      context 'with an non admin user signed in' do
+        before { stub_sign_in }
+
+        it 'returns a 401 response' do
+          patch :update, params: { id: post.id, post: new_params }
 
           expect(response).not_to be_successful
           expect(response.code).to eq('401')
@@ -80,6 +147,8 @@ describe Api::PostsController do
     let!(:post) { FactoryBot.create(:post) }
 
     context 'success' do
+      before { stub_sign_in admin_user }
+
       it 'returns a success response' do
         expect do
           delete :destroy, params: { id: post.id }
@@ -92,14 +161,39 @@ describe Api::PostsController do
 
     context 'error' do
       context 'with an invalid id' do
-        let(:invalid_id) { post.id + 1 }
+        before { stub_sign_in admin_user }
 
-        it 'returns an error response' do
+        it 'returns a 422 response' do
           expect do
-            delete :destroy, params: { id: invalid_id }
+            delete :destroy, params: { id: post.id + 1 }
           end.not_to change { Post.count }
 
           expect(response).not_to be_successful
+          expect(response.code).to eq('422')
+        end
+      end
+
+      context 'without a user signed in' do
+        it 'returns a 401 response' do
+          expect do
+            delete :destroy, params: { id: post.id }
+          end.not_to change { Post.count }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('401')
+        end
+      end
+
+      context 'without an admin user signed in' do
+        before { stub_sign_in }
+
+        it 'returns a 401 response' do
+          expect do
+            delete :destroy, params: { id: post.id }
+          end.not_to change { Post.count }
+
+          expect(response).not_to be_successful
+          expect(response.code).to eq('401')
         end
       end
     end

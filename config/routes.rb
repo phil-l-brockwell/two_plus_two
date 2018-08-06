@@ -10,6 +10,6 @@ Rails.application.routes.draw do
   get 'users/current_user', to: 'users/current_user#index'
 
   namespace :api do
-    resources :posts, only: %i[index create destroy]
+    resources :posts, except: %i[new show]
   end
 end

@@ -6,20 +6,33 @@ class Api::PostsController < ApiController
   end
 
   def create
-    return head 401 unless current_user
+    return head 401 unless current_user&.admin?
 
     post = Post.new post_params
 
     if post.save
-      render json: { post: post }, status: :ok
+      render json: { message: 'Post successfully created!', post: post }, status: :ok
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    return head 401 unless current_user&.admin?
+
+    post = Post.find_by id: params[:id]
+
+    if post&.update(post_params)
+      render json: { message: 'Post successfully updated!', post: post }, status: :ok
     else
       render json: {}, status: :unprocessable_entity
     end
   end
 
   def destroy
-    id = params[:id]
-    post = Post.find_by(id: id)
+    return head 401 unless current_user&.admin?
+
+    post = Post.find_by id: params[:id]
 
     if post&.delete
       render json: { message: 'Post successfully deleted!' }, status: :ok
