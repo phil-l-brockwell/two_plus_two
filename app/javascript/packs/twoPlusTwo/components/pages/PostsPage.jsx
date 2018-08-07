@@ -3,7 +3,8 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
-import Form from "../layout/Form";
+import UpdatePostForm from "../posts/UpdatePostForm";
+import NewPostForm from "../posts/NewPostForm";
 import AdminControls from "../layout/AdminControls";
 
 class PostsPage extends React.Component {
@@ -12,13 +13,9 @@ class PostsPage extends React.Component {
     this.state = {
       posts: [],
       index: 0,
-      showPostForm: false
+      showFetchPostForm: false,
+      showUpdatePostForm: false
     };
-    this.postFields = [
-      { name: "title" },
-      { name: "subtitle" },
-      { name: "text", type: "textarea" }
-    ];
   }
 
   fetchPosts() {
@@ -26,6 +23,19 @@ class PostsPage extends React.Component {
       .get("api/posts")
       .then(response => {
         this.setState({ posts: response.data["posts"] });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  deletePost(id) {
+    axios
+      .delete(`/api/posts/${id}`)
+      .then(response => {
+        var updatedPosts = this.state.posts.slice();
+        updatedPosts.splice(this.state.index, 1);
+        this.setState({ posts: updatedPosts, index: this.previousIndex() });
       })
       .catch(error => {
         console.log(error);
@@ -65,8 +75,23 @@ class PostsPage extends React.Component {
     this.setState({ posts: posts });
   }
 
-  togglePostForm() {
-    this.setState({ showPostForm: !this.state.showPostForm });
+  handlePostUpdate(response) {
+    const newPost = response["data"]["post"];
+    var posts = this.state.posts.slice();
+    const newPostIndex = posts.findIndex(function(post) {
+      return post.id == newPost.id;
+    });
+
+    posts.splice(newPostIndex, 1, newPost)
+    this.setState({ posts: posts });
+  }
+
+  toggleFetchPostForm() {
+    this.setState({ showFetchPostForm: !this.state.showFetchPostForm });
+  }
+
+  toggleUpdatePostForm() {
+    this.setState({ showUpdatePostForm: !this.state.showUpdatePostForm });
   }
 
   render() {
@@ -85,16 +110,31 @@ class PostsPage extends React.Component {
         />
         {this.props.currentUser && this.props.currentUser.admin ? (
           <AdminControls>
-            <button onClick={this.togglePostForm.bind(this)}>post</button>
+            <i
+              className="fa fa-edit fa-lg"
+              onClick={this.toggleUpdatePostForm.bind(this)}
+            />
+            <i
+              className="fa fa-trash fa-lg"
+              onClick={() => this.deletePost(this.currentPost().id)}
+            />
+            <i
+              className="fa fa-file fa-lg"
+              onClick={this.toggleFetchPostForm.bind(this)}
+            />
           </AdminControls>
         ) : null}
-        {this.state.showPostForm ? (
-          <Form
+        {this.state.showFetchPostForm ? (
+          <NewPostForm
             callback={this.updatePosts.bind(this)}
-            toggle={this.togglePostForm.bind(this)}
-            url="/api/posts"
-            resource="post"
-            fields={this.postFields}
+            toggle={this.toggleFetchPostForm.bind(this)}
+          />
+        ) : null}
+        {this.state.showUpdatePostForm ? (
+          <UpdatePostForm
+            toggle={this.toggleUpdatePostForm.bind(this)}
+            post={this.currentPost()}
+            callback={this.handlePostUpdate.bind(this)}
           />
         ) : null}
       </div>
