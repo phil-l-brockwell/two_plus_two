@@ -4,8 +4,9 @@ import PropTypes from "prop-types";
 class PostChanger extends React.Component {
   render() {
     return (
-      <button
-        className={`post-changer ${this.props.direction}-post-changer`}
+      <i
+        className={`fa fa-angle-${this.props.direction} fa-3x`}
+        aria-hidden="true"
         onClick={() => this.props.move(this.props.newIndex)}
       />
     );
@@ -13,7 +14,7 @@ class PostChanger extends React.Component {
 }
 
 PostChanger.propTypes = {
-  direction: PropTypes.oneOf(["back", "next"]).isRequired,
+  direction: PropTypes.oneOf(["left", "right"]).isRequired,
   newIndex: PropTypes.number.isRequired
 };
 

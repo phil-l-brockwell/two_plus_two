@@ -10,14 +10,14 @@ class Post extends React.Component {
         <div className="background" />
         <div className="headings">
           <PostChanger
-            direction={"back"}
+            direction={"left"}
             move={this.props.changeCurrentPost.bind(this)}
             newIndex={this.props.previousIndex}
           />
           <h1>{this.props.post.title}</h1>
           <h2>{this.props.post.subtitle}</h2>
           <PostChanger
-            direction={"next"}
+            direction={"right"}
             move={this.props.changeCurrentPost.bind(this)}
             newIndex={this.props.nextIndex}
           />
