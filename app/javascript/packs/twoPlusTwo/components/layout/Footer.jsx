@@ -23,6 +23,10 @@ class Footer extends React.Component {
       {
         name: "stack-overflow",
         url: "https://stackoverflow.com/users/4543415/phil-brockwell"
+      },
+      {
+        name: 'adn',
+        url: "https://andiapp.co"
       }
     ];
   }
