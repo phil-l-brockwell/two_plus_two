@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-import Input from "../layout/Input";
+import Form from "../layout/Form";
 
-class NewPostForm extends React.Component {
+export default class NewPostForm extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -15,47 +15,40 @@ class NewPostForm extends React.Component {
       errorMessage: ""
     };
     this.fieldTypes = { title: "text", subtitle: "text", text: "textarea" };
+    this.send = this.send.bind(this);
+    this.updateField = this.updateField.bind(this);
   }
 
   render() {
-    const fields = Object.keys(this.state.fields).map((field, i) => (
-      <Input
-        key={i}
-        name={field}
-        value={this.state.fields[field]}
-        type={this.fieldTypes[field]}
-        onChange={e => this.updateField(e)}
-      />
-    ))
+    const { toggle } = this.props;
+    const { fields, errorMessage } = this.state;
+    const fieldTypes = this.fieldTypes;
 
     return (
-      <div className="modal">
-        <form className="post-form">
-          <i
-            className="fa fa-close"
-            aria-hidden="true"
-            onClick={this.props.toggle}
-          />
-          {fields}
-          <input onClick={this.send.bind(this)} type="submit" value="create" />
-          <p>{this.state.errorMessage}</p>
-        </form>
-      </div>
+      <Form
+        resource="post"
+        toggle={toggle}
+        errorMessage={errorMessage}
+        fields={fields}
+        fieldTypes={fieldTypes}
+        updateField={this.updateField}
+        send={this.send}
+      />
     );
   }
 
   send(e) {
     e.preventDefault();
-    const that = this;
+    const { callback, toggle } = this.props;
 
     axios
-      .post('/api/posts', this.payload())
-      .then(function(response) {
-        that.props.callback(response);
-        that.props.toggle();
+      .post("/api/posts", this.payload())
+      .then(response => {
+        callback(response);
+        toggle();
       })
-      .catch(function(response) {
-        that.setState({ errorMessage: "Something went wrong!" });
+      .catch(response => {
+        console.log(response);
       });
   }
 
@@ -79,5 +72,3 @@ NewPostForm.propTypes = {
   toggle: PropTypes.func.isRequired,
   callback: PropTypes.func.isRequired
 };
-
-export default NewPostForm;

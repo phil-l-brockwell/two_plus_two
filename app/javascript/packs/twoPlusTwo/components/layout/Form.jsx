@@ -1,98 +1,48 @@
 import React from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import Input from "../layout/Input";
 
-class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fields: this.initFields(props.fields),
-      errorMessage: ""
-    };
-  }
-
+export default class Form extends React.Component {
   render() {
+    const {
+      resource,
+      toggle,
+      errorMessage,
+      send,
+      updateField,
+      fields,
+      fieldTypes
+    } = this.props;
+
+    const inputs = Object.keys(fields).map((field, i) => (
+      <Input
+        key={i}
+        name={field}
+        value={fields[field]}
+        type={fieldTypes[field]}
+        onChange={e => updateField(e)}
+      />
+    ));
+
     return (
       <div className="modal">
-        <form className={`${this.props.resource}-form`}>
-          <i
-            className="fa fa-close"
-            aria-hidden="true"
-            onClick={this.props.toggle}
-          />
-          {this.props.fields.map((field, i) => (
-            <Input
-              key={i}
-              type={field.type}
-              name={field.name}
-              value={this.state.fields[field.name]}
-              onChange={e => this.updateField(e)}
-            />
-          ))}
-          <input onClick={this.send.bind(this)} type="submit" />
-          <p>{this.state.errorMessage}</p>
+        <form className={`${resource}-form`}>
+          <i className="fa fa-close" aria-hidden="true" onClick={toggle} />
+          {inputs}
+          <input onClick={send} type="submit" />
+          <p>{errorMessage}</p>
         </form>
       </div>
     );
   }
-
-  send(e) {
-    e.preventDefault();
-    const that = this;
-
-    axios
-      .post(that.props.url, this.payload())
-      .then(function(response) {
-        const token = response.data["authenticity_token"];
-        if (token) {
-          document.querySelector('meta[name="csrf-token"]').content = token;
-        }
-        that.props.callback(response);
-        that.props.toggle();
-      })
-      .catch(function(response) {
-        that.setState({ errorMessage: "Something went wrong!" });
-      });
-  }
-
-  componentWillUnMount() {
-    this.setState({
-      fields: this.initFields(this.props.fields),
-      errorMessage: ""
-    });
-  }
-
-  initFields(fields) {
-    return fields.reduce((obj, item) => {
-      obj[item["name"]] = "";
-      return obj;
-    }, {});
-  }
-
-  updateField(e) {
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        [e.target.id]: e.target.value
-      }
-    });
-  }
-
-  payload() {
-    return {
-      [this.props.resource]: this.state.fields,
-      authenticity_token: document.querySelector('meta[name="csrf-token"]').content
-    };
-  }
 }
 
 Form.propTypes = {
-  callback: PropTypes.func,
+  resource: PropTypes.string,
   toggle: PropTypes.func.isRequired,
-  url: PropTypes.string.isRequired,
-  resource: PropTypes.string.isRequired,
-  fields: PropTypes.array.isRequired,
+  fields: PropTypes.object.isRequired,
+  fieldTypes: PropTypes.object.isRequired,
+  errorMessage: PropTypes.string,
+  send: PropTypes.func.isRequired,
+  updateField: PropTypes.func.isRequired
 }
-
-export default Form;

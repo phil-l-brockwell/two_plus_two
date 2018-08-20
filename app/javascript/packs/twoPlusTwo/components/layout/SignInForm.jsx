@@ -1,6 +1,6 @@
 import React from "react";
-import Input from "./Input";
 import axios from "axios";
+import Form from "./Form";
 
 export default class SignInForm extends React.Component {
   constructor() {
@@ -14,6 +14,7 @@ export default class SignInForm extends React.Component {
     };
     this.fieldTypes = { email: "text", password: "password" };
     this.send = this.send.bind(this);
+    this.updateField = this.updateField.bind(this);
   }
 
   send(e) {
@@ -36,31 +37,20 @@ export default class SignInForm extends React.Component {
   }
 
   render() {
-    const fields = Object.keys(this.state.fields).map((field, i) => (
-      <Input
-        key={i}
-        name={field}
-        value={this.state.fields[field]}
-        type={this.fieldTypes[field]}
-        onChange={e => this.updateField(e)}
-      />
-    ));
-
     const { toggle } = this.props;
+    const { fields, errorMessage } = this.state;
+    const fieldTypes = this.fieldTypes;
 
     return (
-      <div className="modal">
-        <form className="user-form">
-          <i
-            className="fa fa-close"
-            aria-hidden="true"
-            onClick={toggle}
-          />
-          {fields}
-          <input onClick={this.send} type="submit" />
-          <p>{this.state.errorMessage}</p>
-        </form>
-      </div>
+      <Form
+        resource="user"
+        toggle={toggle}
+        errorMessage={errorMessage}
+        fields={fields}
+        fieldTypes={fieldTypes}
+        updateField={this.updateField}
+        send={this.send}
+      />
     );
   }
 
