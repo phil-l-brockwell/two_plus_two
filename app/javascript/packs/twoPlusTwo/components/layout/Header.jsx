@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import Avatar from "images/avatar.png";
 import SignOutButton from "./SignOutButton";
 import Form from "./Form";
@@ -23,8 +22,8 @@ export default class Header extends React.Component {
     return (
       <CurrentUserConsumer>
         {context => {
-          const { user } = context.state
-          const { updateCurrentUser, removeCurrentUser } = context.actions
+          const { user } = context.state;
+          const { updateCurrentUser, removeCurrentUser } = context.actions;
 
           return (
             <header>
@@ -43,13 +42,7 @@ export default class Header extends React.Component {
                   blog
                 </Link>
                 {user ? (
-                  <SignOutButton
-                    authenticationToken={this.props.authenticationToken}
-                    updateAuthenticationToken={
-                      this.props.updateAuthenticationToken
-                    }
-                    callback={removeCurrentUser}
-                  />
+                  <SignOutButton callback={removeCurrentUser} />
                 ) : (
                   <button className="button" onClick={this.toggleLoginForm}>
                     log in
@@ -58,10 +51,6 @@ export default class Header extends React.Component {
               </div>
               {this.state.showLoginForm ? (
                 <Form
-                  authenticityToken={this.props.authenticationToken}
-                  updateAuthenticationToken={
-                    this.props.updateAuthenticationToken
-                  }
                   callback={updateCurrentUser}
                   toggle={this.toggleLoginForm}
                   url="/users/sign_in.json"
@@ -80,8 +69,3 @@ export default class Header extends React.Component {
     this.setState({ showLoginForm: !this.state.showLoginForm });
   }
 }
-
-Header.proptypes = {
-  authenticationToken: PropTypes.string.isRequired,
-  updateAuthenticationToken: PropTypes.func.isRequired,
-};

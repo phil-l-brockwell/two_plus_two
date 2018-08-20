@@ -46,7 +46,7 @@ class Form extends React.Component {
       .then(function(response) {
         const token = response.data["authenticity_token"];
         if (token) {
-          that.props.updateAuthenticationToken(token);
+          document.querySelector('meta[name="csrf-token"]').content = token;
         }
         that.props.callback(response);
         that.props.toggle();
@@ -82,7 +82,7 @@ class Form extends React.Component {
   payload() {
     return {
       [this.props.resource]: this.state.fields,
-      authenticity_token: this.props.authenticityToken
+      authenticity_token: document.querySelector('meta[name="csrf-token"]').content
     };
   }
 }
@@ -93,8 +93,6 @@ Form.propTypes = {
   url: PropTypes.string.isRequired,
   resource: PropTypes.string.isRequired,
   fields: PropTypes.array.isRequired,
-  authenticityToken: PropTypes.string,
-  updateAuthenticationToken: PropTypes.func
 }
 
 export default Form;

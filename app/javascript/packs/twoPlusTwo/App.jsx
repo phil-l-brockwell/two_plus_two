@@ -7,28 +7,12 @@ import PostsPage from "./components/pages/PostsPage";
 import { CurrentUserProvider } from "./CurrentUser";
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      authenticationToken: document.querySelector('meta[name="csrf-token"]')
-        .content
-    };
-    this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
-  }
-
-  updateAuthenticationToken(newToken) {
-    this.setState({ authenticationToken: newToken });
-  }
-
   render() {
     return (
       <CurrentUserProvider>
         <Router>
           <div className="page">
-            <Header
-              authenticationToken={this.state.authenticationToken}
-              updateAuthenticationToken={this.updateAuthenticationToken}
-            />
+            <Header />
             <Route exact path="/" component={PostsPage} />
             <Route exact path="/posts" component={PostsPage} />
             <Footer />
