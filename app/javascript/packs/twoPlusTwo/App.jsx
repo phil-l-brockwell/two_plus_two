@@ -1,37 +1,19 @@
 import React from "react";
 import axios from "axios";
-import PageRouter from "./PageRouter";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import PostsPage from "./components/pages/PostsPage";
+import { CurrentUserProvider } from "./CurrentUser";
 
-class App extends React.Component {
+export default class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      currentUser: null,
-      authenticationToken: document.querySelector('meta[name="csrf-token"]').content
+      authenticationToken: document.querySelector('meta[name="csrf-token"]')
+        .content
     };
-  }
-
-  getCurrentUser() {
-    axios
-      .get("users/current_user")
-      .then(response => {
-        this.updateCurrentUser(response);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  updateCurrentUser(response) {
-    this.setState({ currentUser: response.data["user"] });
-  }
-
-  removeCurrentUser() {
-    this.setState({ currentUser: null });
-  }
-
-  componentDidMount() {
-    this.getCurrentUser();
+    this.updateAuthenticationToken = this.updateAuthenticationToken.bind(this);
   }
 
   updateAuthenticationToken(newToken) {
@@ -40,15 +22,19 @@ class App extends React.Component {
 
   render() {
     return (
-      <PageRouter
-        currentUser={this.state.currentUser}
-        updateCurrentUser={this.updateCurrentUser.bind(this)}
-        removeCurrentUser={this.removeCurrentUser.bind(this)}
-        authenticationToken={this.state.authenticationToken}
-        updateAuthenticationToken={this.updateAuthenticationToken.bind(this)}
-      />
+      <CurrentUserProvider>
+        <Router>
+          <div className="page">
+            <Header
+              authenticationToken={this.state.authenticationToken}
+              updateAuthenticationToken={this.updateAuthenticationToken}
+            />
+            <Route exact path="/" component={PostsPage} />
+            <Route exact path="/posts" component={PostsPage} />
+            <Footer />
+          </div>
+        </Router>
+      </CurrentUserProvider>
     );
   }
 }
-
-export default App;

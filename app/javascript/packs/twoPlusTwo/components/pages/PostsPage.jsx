@@ -6,8 +6,9 @@ import PostList from "../posts/PostList";
 import UpdatePostForm from "../posts/UpdatePostForm";
 import NewPostForm from "../posts/NewPostForm";
 import AdminControls from "../layout/AdminControls";
+import { CurrentUserConsumer } from "../../CurrentUser";
 
-class PostsPage extends React.Component {
+export default class PostsPage extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -82,7 +83,7 @@ class PostsPage extends React.Component {
       return post.id == newPost.id;
     });
 
-    posts.splice(newPostIndex, 1, newPost)
+    posts.splice(newPostIndex, 1, newPost);
     this.setState({ posts: posts });
   }
 
@@ -96,54 +97,56 @@ class PostsPage extends React.Component {
 
   render() {
     return (
-      <div className="content">
-        <PostList
-          posts={this.state.posts}
-          currentIndex={this.state.index}
-          changeCurrentPost={this.changeCurrentPost.bind(this)}
-        />
-        <Post
-          post={this.currentPost()}
-          changeCurrentPost={this.changeCurrentPost.bind(this)}
-          previousIndex={this.previousIndex()}
-          nextIndex={this.nextIndex()}
-        />
-        {this.props.currentUser && this.props.currentUser.admin ? (
-          <AdminControls>
-            <i
-              className="fa fa-edit fa-lg"
-              onClick={this.toggleUpdatePostForm.bind(this)}
-            />
-            <i
-              className="fa fa-trash fa-lg"
-              onClick={() => this.deletePost(this.currentPost().id)}
-            />
-            <i
-              className="fa fa-file fa-lg"
-              onClick={this.toggleFetchPostForm.bind(this)}
-            />
-          </AdminControls>
-        ) : null}
-        {this.state.showFetchPostForm ? (
-          <NewPostForm
-            callback={this.updatePosts.bind(this)}
-            toggle={this.toggleFetchPostForm.bind(this)}
-          />
-        ) : null}
-        {this.state.showUpdatePostForm ? (
-          <UpdatePostForm
-            toggle={this.toggleUpdatePostForm.bind(this)}
-            post={this.currentPost()}
-            callback={this.handlePostUpdate.bind(this)}
-          />
-        ) : null}
-      </div>
+      <CurrentUserConsumer>
+        {context => {
+          const { user } = context.state;
+
+          return (
+            <div className="content">
+              <PostList
+                posts={this.state.posts}
+                currentIndex={this.state.index}
+                changeCurrentPost={this.changeCurrentPost.bind(this)}
+              />
+              <Post
+                post={this.currentPost()}
+                changeCurrentPost={this.changeCurrentPost.bind(this)}
+                previousIndex={this.previousIndex()}
+                nextIndex={this.nextIndex()}
+              />
+              {user && user.admin ? (
+                <AdminControls>
+                  <i
+                    className="fa fa-edit fa-lg"
+                    onClick={this.toggleUpdatePostForm.bind(this)}
+                  />
+                  <i
+                    className="fa fa-trash fa-lg"
+                    onClick={() => this.deletePost(this.currentPost().id)}
+                  />
+                  <i
+                    className="fa fa-file fa-lg"
+                    onClick={this.toggleFetchPostForm.bind(this)}
+                  />
+                </AdminControls>
+              ) : null}
+              {this.state.showFetchPostForm ? (
+                <NewPostForm
+                  callback={this.updatePosts.bind(this)}
+                  toggle={this.toggleFetchPostForm.bind(this)}
+                />
+              ) : null}
+              {this.state.showUpdatePostForm ? (
+                <UpdatePostForm
+                  toggle={this.toggleUpdatePostForm.bind(this)}
+                  post={this.currentPost()}
+                  callback={this.handlePostUpdate.bind(this)}
+                />
+              ) : null}
+            </div>
+          );
+        }}
+      </CurrentUserConsumer>
     );
   }
 }
-
-PostsPage.propTypes = {
-  currentUser: PropTypes.object
-};
-
-export default PostsPage;
