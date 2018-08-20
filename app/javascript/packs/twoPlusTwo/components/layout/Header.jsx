@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Avatar from "images/avatar.png";
 import SignOutButton from "./SignOutButton";
-import Form from "./Form";
+import SignInForm from "./SignInForm";
 import { CurrentUserConsumer } from "../../CurrentUser";
 
 export default class Header extends React.Component {
@@ -12,10 +12,6 @@ export default class Header extends React.Component {
       showLoginForm: false
     };
     this.toggleLoginForm = this.toggleLoginForm.bind(this);
-    this.userFields = [
-      { name: "email" },
-      { name: "password", type: "password" }
-    ];
   }
 
   render() {
@@ -23,7 +19,7 @@ export default class Header extends React.Component {
       <CurrentUserConsumer>
         {context => {
           const { user } = context.state;
-          const { updateCurrentUser, removeCurrentUser } = context.actions;
+          const { updateCurrentUser } = context.actions;
 
           return (
             <header>
@@ -42,7 +38,7 @@ export default class Header extends React.Component {
                   blog
                 </Link>
                 {user ? (
-                  <SignOutButton callback={removeCurrentUser} />
+                  <SignOutButton updateCurrentUser={updateCurrentUser} />
                 ) : (
                   <button className="button" onClick={this.toggleLoginForm}>
                     log in
@@ -50,12 +46,9 @@ export default class Header extends React.Component {
                 )}
               </div>
               {this.state.showLoginForm ? (
-                <Form
-                  callback={updateCurrentUser}
+                <SignInForm
+                  updateCurrentUser={updateCurrentUser}
                   toggle={this.toggleLoginForm}
-                  url="/users/sign_in.json"
-                  resource="user"
-                  fields={this.userFields}
                 />
               ) : null}
             </header>
@@ -66,6 +59,6 @@ export default class Header extends React.Component {
   }
 
   toggleLoginForm() {
-    this.setState({ showLoginForm: !this.state.showLoginForm });
+    this.setState(prevState => ({ showLoginForm: !prevState.showLoginForm }));
   }
 }

@@ -10,27 +10,21 @@ export class CurrentUserProvider extends React.Component {
       user: null
     };
     this.getCurrentUser();
-    this.updateCurrentUser = this.updateCurrentUser.bind(this);
-    this.removeCurrentUser = this.removeCurrentUser.bind(this);
   }
 
   getCurrentUser() {
     axios
       .get("/users/current_user")
       .then(response => {
-        this.updateCurrentUser(response);
+        this.updateCurrentUser(response.data["user"]);
       })
       .catch(error => {
         console.log(error);
       });
   }
 
-  updateCurrentUser(response) {
-    this.setState({ user: response.data["user"] });
-  }
-
-  removeCurrentUser() {
-    this.setState({ user: null });
+  updateCurrentUser(user) {
+    this.setState({ user: user });
   }
 
   render() {
@@ -39,8 +33,7 @@ export class CurrentUserProvider extends React.Component {
         value={{
           state: this.state,
           actions: {
-            updateCurrentUser: this.updateCurrentUser,
-            removeCurrentUser: this.removeCurrentUser
+            updateCurrentUser: this.updateCurrentUser.bind(this)
           }
         }}
       >

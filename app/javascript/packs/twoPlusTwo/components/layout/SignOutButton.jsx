@@ -2,29 +2,33 @@ import React from "react";
 import axios from "axios";
 
 export default class SignOutButton extends React.Component {
-  handleLogout(e) {
-    e.preventDefault();
-    const data = this.payload();
-    const that = this;
+  constructor() {
+    super();
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout() {
+    const data = {
+      authenticity_token: document.querySelector('meta[name="csrf-token"]')
+        .content
+    };
+    const { updateCurrentUser } = this.props;
 
     axios
       .delete("/users/sign_out.json", { data })
-      .then(function(response) {
-        that.props.callback();
-        document.querySelector('meta[name="csrf-token"]').content = response.data["authenticity_token"];
+      .then(response => {
+        updateCurrentUser();
+        const token = response.data["authenticity_token"];
+        if (token) {
+          document.querySelector('meta[name="csrf-token"]').content = token;
+        }
       })
-      .catch(function(error) {
+      .catch(error => {
         console.log(error);
       });
   }
 
-  payload() {
-    return {
-      authenticity_token: document.querySelector('meta[name="csrf-token"]').content
-    };
-  }
-
   render() {
-    return <button onClick={this.handleLogout.bind(this)}>sign out</button>;
+    return <button onClick={this.handleLogout}>sign out</button>;
   }
 }
