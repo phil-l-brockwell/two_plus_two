@@ -1,28 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import PostChanger from "../posts/PostChanger";
-import BackgroundImage from "images/banksy-hero.jpg";
 
 class Post extends React.Component {
   render() {
+    const { title, subtitle, text } = this.props.post;
+
     return (
       <div className="post">
         <div className="background" />
         <div className="headings">
-          <PostChanger
-            direction={"left"}
-            move={this.props.changeCurrentPost.bind(this)}
-            newIndex={this.props.previousIndex}
-          />
-          <h1>{this.props.post.title}</h1>
-          <h2>{this.props.post.subtitle}</h2>
-          <PostChanger
-            direction={"right"}
-            move={this.props.changeCurrentPost.bind(this)}
-            newIndex={this.props.nextIndex}
-          />
+          <h1>{title}</h1>
+          <h2>{subtitle}</h2>
         </div>
-        <p>{this.props.post.text}</p>
+        <p>{text}</p>
       </div>
     );
   }
@@ -33,9 +23,6 @@ Post.defaultProps = {
 };
 
 Post.propTypes = {
-  changeCurrentPost: PropTypes.func.isRequired,
-  previousIndex: PropTypes.number.isRequired,
-  nextIndex: PropTypes.number.isRequired,
   post: PropTypes.object
 };
 

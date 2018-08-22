@@ -31,21 +31,6 @@
     top: $background-height * 1.2;
     margin: 0 10%;
   }
-
-  i.fa {
-    position: absolute;
-    bottom: 0;
-    height: 40px;
-    line-height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    color: black;
-    cursor: pointer;
-
-    &.fa-angle-left { left: 10px; }
-    &.fa-angle-right { right: 10px; }
-    &:hover { color: $light-green; }
-  }
 }
 
 .post-list {

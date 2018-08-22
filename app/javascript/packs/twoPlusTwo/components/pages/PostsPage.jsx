@@ -47,20 +47,6 @@ export default class PostsPage extends React.Component {
     this.fetchPosts();
   }
 
-  previousIndex() {
-    if (this.state.index === 0) {
-      return this.state.index;
-    }
-    return this.state.index - 1;
-  }
-
-  nextIndex() {
-    if (this.state.index === this.state.posts.length - 1) {
-      return this.state.index;
-    }
-    return this.state.index + 1;
-  }
-
   changeCurrentPost(newIndex) {
     this.setState({ index: newIndex });
   }
@@ -106,14 +92,9 @@ export default class PostsPage extends React.Component {
               <PostList
                 posts={this.state.posts}
                 currentIndex={this.state.index}
-                changeCurrentPost={this.changeCurrentPost.bind(this)}
+                changeCurrentPost={this.changeCurrentPost}
               />
-              <Post
-                post={this.currentPost()}
-                changeCurrentPost={this.changeCurrentPost.bind(this)}
-                previousIndex={this.previousIndex()}
-                nextIndex={this.nextIndex()}
-              />
+              <Post post={this.currentPost()} />
               {user && user.admin ? (
                 <AdminControls>
                   <i
