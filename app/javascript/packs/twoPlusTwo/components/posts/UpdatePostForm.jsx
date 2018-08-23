@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import Form from "../layout/Form";
 
@@ -42,10 +41,16 @@ export default class UpdatePostForm extends React.Component {
     const { handleUpdatePost, toggle } = this.props;
     const { id } = this.props.post;
 
-    axios
-      .put(`/api/posts/${id}`, this.payload())
+    fetch(`/api/posts/${id}`, this.payload())
       .then(response => {
-        handleUpdatePost(response.data.post);
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(response => {
+        handleUpdatePost(response.post);
         toggle();
       })
       .catch(response => {
@@ -64,7 +69,13 @@ export default class UpdatePostForm extends React.Component {
 
   payload() {
     return {
-      post: this.state.fields
+      method: "PUT",
+      body: JSON.stringify({
+        post: this.state.fields
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
     };
   }
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 
 export default class DeletePostButton extends React.Component {
@@ -12,8 +11,14 @@ export default class DeletePostButton extends React.Component {
     const { handleDeletePost } = this.props;
     const { id } = this.props.post;
 
-    axios
-      .delete(`/api/posts/${id}`)
+    fetch(`/api/posts/${id}`, { method: "DELETE" })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
       .then(response => {
         handleDeletePost(id);
       })

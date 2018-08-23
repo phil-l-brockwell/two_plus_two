@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import Form from "../layout/Form";
 
@@ -41,10 +40,16 @@ export default class NewPostForm extends React.Component {
     e.preventDefault();
     const { handleCreatePost, toggle } = this.props;
 
-    axios
-      .post("/api/posts", this.payload())
+    fetch("/api/posts", this.payload())
       .then(response => {
-        handleCreatePost(response.data.post);
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(response => {
+        handleCreatePost(response.post);
         toggle();
       })
       .catch(response => {
@@ -63,7 +68,13 @@ export default class NewPostForm extends React.Component {
 
   payload() {
     return {
-      post: this.state.fields
+      method: "POST",
+      body: JSON.stringify({
+        post: this.state.fields
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
     };
   }
 }

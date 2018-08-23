@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 
 export default class SignOutButton extends React.Component {
   constructor() {
@@ -14,18 +13,37 @@ export default class SignOutButton extends React.Component {
     };
     const { updateCurrentUser } = this.props;
 
-    axios
-      .delete("/users/sign_out.json", { data })
+    fetch("/users/sign_out.json", this.payload())
       .then(response => {
-        updateCurrentUser();
-        const token = response.data["authenticity_token"];
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(response => {
+        const token = response.authenticity_token;
         if (token) {
           document.querySelector('meta[name="csrf-token"]').content = token;
         }
+        updateCurrentUser(response.user);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(response => {
+        console.log(response);
       });
+  }
+
+  payload() {
+    return {
+      method: "DELETE",
+      body: JSON.stringify({
+        authenticity_token: document.querySelector('meta[name="csrf-token')
+          .content
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
   }
 
   render() {

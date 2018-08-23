@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 
 const CurrentUserContext = React.createContext();
 export const CurrentUserConsumer = CurrentUserContext.Consumer;
@@ -13,10 +12,16 @@ export class CurrentUserProvider extends React.Component {
   }
 
   getCurrentUser() {
-    axios
-      .get("/users/current_user")
+    fetch("/users/current_user")
       .then(response => {
-        this.updateCurrentUser(response.data["user"]);
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(response => {
+        this.updateCurrentUser(response.user);
       })
       .catch(error => {
         console.log(error);

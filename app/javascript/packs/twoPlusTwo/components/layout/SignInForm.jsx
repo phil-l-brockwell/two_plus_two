@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import Form from "./Form";
 
 export default class SignInForm extends React.Component {
@@ -21,18 +20,24 @@ export default class SignInForm extends React.Component {
     e.preventDefault();
     const { updateCurrentUser, toggle } = this.props;
 
-    axios
-      .post("/users/sign_in.json", this.payload())
+    fetch("/users/sign_in.json", this.payload())
       .then(response => {
-        const token = response.data["authenticity_token"];
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(response => {
+        const token = response.authenticity_token;
         if (token) {
           document.querySelector('meta[name="csrf-token"]').content = token;
         }
-        updateCurrentUser(response.data["user"]);
+        updateCurrentUser(response.user);
         toggle();
       })
       .catch(response => {
-        that.setState({ errorMessage: "Something went wrong!" });
+        console.log(response);
       });
   }
 
@@ -56,9 +61,14 @@ export default class SignInForm extends React.Component {
 
   payload() {
     return {
-      user: this.state.fields,
-      authenticity_token: document.querySelector('meta[name="csrf-token"]')
-        .content
+      method: "POST",
+      body: JSON.stringify({
+        user: this.state.fields,
+        authenticity_token: document.querySelector('meta[name="csrf-token').content
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
     };
   }
 

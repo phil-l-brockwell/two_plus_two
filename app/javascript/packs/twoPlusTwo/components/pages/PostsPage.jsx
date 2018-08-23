@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import PropTypes from "prop-types";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
@@ -27,17 +26,23 @@ export default class PostsPage extends React.Component {
   }
 
   fetchPosts() {
-    axios
-      .get("/api/posts")
+    fetch("/api/posts")
       .then(response => {
-        this.setState({ posts: response.data.posts });
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error();
+        }
+      })
+      .then(response => {
+        this.setState({ posts: response.posts });
       })
       .catch(error => {
         console.log(error);
       });
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.fetchPosts();
   }
 
