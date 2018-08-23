@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   root to: 'pages#root'
   get '/posts', to: 'pages#root'
+  get '/posts/:id', to: 'pages#root'
   get 'users/current_user', to: 'users/current_user#index'
 
   namespace :api do

@@ -82,6 +82,6 @@ export default class UpdatePostForm extends React.Component {
 
 UpdatePostForm.propTypes = {
   toggle: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired,
+  post: PropTypes.object,
   handleUpdatePost: PropTypes.func.isRequired
 };

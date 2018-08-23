@@ -10,8 +10,9 @@ export default class App extends React.Component {
       <CurrentUserProvider>
         <Router>
           <Layout>
-            <Route path="/" component={PostsPage} />
-            <Route path="posts" component={PostsPage} />
+            <Route exact path="/" component={PostsPage} />
+            <Route exact path="/posts" component={PostsPage} />
+            <Route exact path="/posts/:id" component={PostsPage} />
           </Layout>
         </Router>
       </CurrentUserProvider>

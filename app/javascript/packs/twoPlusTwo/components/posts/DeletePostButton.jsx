@@ -34,5 +34,5 @@ export default class DeletePostButton extends React.Component {
 
 DeletePostButton.propTypes = {
   handleDeletePost: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object
 };

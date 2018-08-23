@@ -9,15 +9,14 @@ import DeletePostButton from "../posts/DeletePostButton";
 import { CurrentUserConsumer } from "../../CurrentUser";
 
 export default class PostsPage extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       posts: [],
-      currentIndex: 0,
       showNewPostForm: false,
-      showUpdatePostForm: false
+      showUpdatePostForm: false,
+      currentPostId: +this.props.match.params.id || null
     };
-    this.changeCurrentPostIndex = this.changeCurrentPostIndex.bind(this);
     this.toggleUpdatePostForm = this.toggleUpdatePostForm.bind(this);
     this.toggleNewPostForm = this.toggleNewPostForm.bind(this);
     this.handleCreatePost = this.handleCreatePost.bind(this);
@@ -46,12 +45,16 @@ export default class PostsPage extends React.Component {
     this.fetchPosts();
   }
 
-  changeCurrentPostIndex(newIndex) {
-    this.setState({ currentIndex: newIndex });
+  componentWillReceiveProps(newProps) {
+    this.setState({ currentPostId: +newProps.match.params.id });
   }
 
   currentPost() {
-    return this.state.posts[this.state.currentIndex] || {};
+    return (
+      this.state.posts.find(post => {
+        return post.id === this.state.currentPostId;
+      }) || this.state.posts[0]
+    );
   }
 
   handleDeletePost(deletedPostId) {
@@ -62,8 +65,7 @@ export default class PostsPage extends React.Component {
 
     posts.splice(deletedPostIndex, 1);
     this.setState(prevState => ({
-      posts: posts,
-      currentIndex: prevState.currentIndex - 1
+      posts: posts
     }));
   }
 
@@ -106,11 +108,7 @@ export default class PostsPage extends React.Component {
 
           return (
             <div className="content">
-              <PostList
-                posts={posts}
-                currentPost={currentPost}
-                changeCurrentPostIndex={this.changeCurrentPostIndex}
-              />
+              <PostList posts={posts} currentPost={currentPost} />
               <Post post={currentPost} />
               {user && user.admin ? (
                 <AdminControls>

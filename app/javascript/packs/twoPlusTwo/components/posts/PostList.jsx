@@ -4,19 +4,19 @@ import PostListItem from "./PostListItem";
 
 export default class PostList extends React.Component {
   render() {
-    const { posts, changeCurrentPostIndex, currentPost } = this.props;
+    const { posts, currentPost } = this.props;
 
     return (
       <div className="post-list">
-        {posts.map((post, i) => {
+        {posts.map(post => {
           const { id, title } = post;
 
           return (
             <PostListItem
               key={id}
-              onClick={() => changeCurrentPostIndex(i)}
               title={title}
               selected={post === currentPost}
+              id={id}
             />
           );
         })}
@@ -25,8 +25,11 @@ export default class PostList extends React.Component {
   }
 }
 
+PostList.defaultProps = {
+  post: { title: "Loading..." }
+};
+
 PostList.propTypes = {
   posts: PropTypes.array.isRequired,
-  changeCurrentPostIndex: PropTypes.func.isRequired,
-  currentPost: PropTypes.object.isRequired
+  currentPost: PropTypes.object
 };

@@ -1,14 +1,15 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 export default class PostListItem extends React.Component {
   render() {
-    const { onClick, title } = this.props;
+    const { title, id } = this.props;
 
     return (
-      <div className={this.classNameString()} onClick={onClick}>
+      <Link to={`/posts/${id}`} className={this.classNameString()}>
         {title}
-      </div>
+      </Link>
     );
   }
 
@@ -26,6 +27,5 @@ export default class PostListItem extends React.Component {
 
 PostListItem.propTypes = {
   title: PropTypes.string.isRequired,
-  onClick: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired
 };
