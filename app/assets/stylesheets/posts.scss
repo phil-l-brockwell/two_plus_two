@@ -44,6 +44,7 @@
   .post-list-item {
     width: 25%;
     cursor: pointer;
+    color: black;
 
     &.current-post-list-item {
       text-decoration: underline;

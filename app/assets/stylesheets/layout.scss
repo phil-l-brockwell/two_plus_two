@@ -1,7 +1,7 @@
 @import "variables";
 
 .page {
-  min-height: 1000px;
+  min-height: 2000px;
 }
 
 div.content {
@@ -102,6 +102,8 @@ footer {
   width: 100%;
   border-top: solid 1px white;
   text-align: center;
+  position: fixed;
+  bottom: 0;
 
   .fa {
     color: white;
