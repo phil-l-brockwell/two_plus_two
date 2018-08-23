@@ -1,39 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
+import PostListItem from "./PostListItem";
 
-class PostList extends React.Component {
+export default class PostList extends React.Component {
   render() {
+    const { posts, changeCurrentPostIndex, currentPost } = this.props;
+
     return (
       <div className="post-list">
-        {this.props.posts.map((post, i) => {
+        {posts.map((post, i) => {
+          const { id, title } = post;
+
           return (
-            <div
-              className={this.styleStringFor(i)}
-              key={i}
-              onClick={() => this.props.changeCurrentPost(i)}
-            >
-              {post.title}
-            </div>
+            <PostListItem
+              key={id}
+              onClick={() => changeCurrentPostIndex(i)}
+              title={title}
+              selected={post === currentPost}
+            />
           );
         })}
       </div>
     );
   }
-
-  styleStringFor(index) {
-    var s = "post-list-item";
-
-    if (index === this.props.currentIndex) {
-      s += " current-post-list-item";
-    }
-
-    return s;
-  }
 }
 
 PostList.propTypes = {
   posts: PropTypes.array.isRequired,
-  changeCurrentPost: PropTypes.func.isRequired
+  changeCurrentPostIndex: PropTypes.func.isRequired,
+  currentPost: PropTypes.object.isRequired
 };
-
-export default PostList;
