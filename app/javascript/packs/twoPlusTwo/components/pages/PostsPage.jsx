@@ -6,6 +6,7 @@ import PostList from "../posts/PostList";
 import UpdatePostForm from "../posts/UpdatePostForm";
 import NewPostForm from "../posts/NewPostForm";
 import AdminControls from "../layout/AdminControls";
+import DeletePostButton from "../posts/DeletePostButton";
 import { CurrentUserConsumer } from "../../CurrentUser";
 
 export default class PostsPage extends React.Component {
@@ -13,30 +14,23 @@ export default class PostsPage extends React.Component {
     super();
     this.state = {
       posts: [],
-      index: 0,
-      showFetchPostForm: false,
+      currentIndex: 0,
+      showNewPostForm: false,
       showUpdatePostForm: false
     };
+    this.changeCurrentPostIndex = this.changeCurrentPostIndex.bind(this);
+    this.toggleUpdatePostForm = this.toggleUpdatePostForm.bind(this);
+    this.toggleNewPostForm = this.toggleNewPostForm.bind(this);
+    this.handleCreatePost = this.handleCreatePost.bind(this);
+    this.handleUpdatePost = this.handleUpdatePost.bind(this);
+    this.handleDeletePost = this.handleDeletePost.bind(this);
   }
 
   fetchPosts() {
     axios
-      .get("api/posts")
+      .get("/api/posts")
       .then(response => {
-        this.setState({ posts: response.data["posts"] });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-
-  deletePost(id) {
-    axios
-      .delete(`/api/posts/${id}`)
-      .then(response => {
-        var updatedPosts = this.state.posts.slice();
-        updatedPosts.splice(this.state.index, 1);
-        this.setState({ posts: updatedPosts, index: this.previousIndex() });
+        this.setState({ posts: response.data.posts });
       })
       .catch(error => {
         console.log(error);
@@ -47,41 +41,59 @@ export default class PostsPage extends React.Component {
     this.fetchPosts();
   }
 
-  changeCurrentPost(newIndex) {
-    this.setState({ index: newIndex });
+  changeCurrentPostIndex(newIndex) {
+    this.setState({ currentIndex: newIndex });
   }
 
   currentPost() {
-    return this.state.posts[this.state.index];
+    return this.state.posts[this.state.currentIndex] || {};
   }
 
-  updatePosts(response) {
-    var newPost = response["data"]["post"];
+  handleDeletePost(deletedPostId) {
+    var posts = this.state.posts.slice();
+    const deletedPostIndex = posts.findIndex(post => {
+      return post.id === deletedPostId;
+    });
+
+    posts.splice(deletedPostIndex, 1);
+    this.setState(prevState => ({
+      posts: posts,
+      currentIndex: prevState.currentIndex - 1
+    }));
+  }
+
+  handleCreatePost(newPost) {
     var posts = this.state.posts.slice();
     posts.push(newPost);
     this.setState({ posts: posts });
   }
 
-  handlePostUpdate(response) {
-    const newPost = response["data"]["post"];
+  handleUpdatePost(updatedPost) {
     var posts = this.state.posts.slice();
-    const newPostIndex = posts.findIndex(function(post) {
-      return post.id == newPost.id;
+    const updatedPostIndex = posts.findIndex(post => {
+      return post.id === updatedPost.id;
     });
 
-    posts.splice(newPostIndex, 1, newPost);
+    posts.splice(updatedPostIndex, 1, updatedPost);
     this.setState({ posts: posts });
   }
 
-  toggleFetchPostForm() {
-    this.setState({ showFetchPostForm: !this.state.showFetchPostForm });
+  toggleNewPostForm() {
+    this.setState(prevState => ({
+      showNewPostForm: !prevState.showNewPostForm
+    }));
   }
 
   toggleUpdatePostForm() {
-    this.setState({ showUpdatePostForm: !this.state.showUpdatePostForm });
+    this.setState(prevState => ({
+      showUpdatePostForm: !prevState.showUpdatePostForm
+    }));
   }
 
   render() {
+    const currentPost = this.currentPost();
+    const { posts, showNewPostForm, showUpdatePostForm } = this.state;
+
     return (
       <CurrentUserConsumer>
         {context => {
@@ -90,38 +102,38 @@ export default class PostsPage extends React.Component {
           return (
             <div className="content">
               <PostList
-                posts={this.state.posts}
-                currentIndex={this.state.index}
-                changeCurrentPost={this.changeCurrentPost}
+                posts={posts}
+                currentPost={currentPost}
+                changeCurrentPostIndex={this.changeCurrentPostIndex}
               />
-              <Post post={this.currentPost()} />
+              <Post post={currentPost} />
               {user && user.admin ? (
                 <AdminControls>
                   <i
                     className="fa fa-edit fa-lg"
-                    onClick={this.toggleUpdatePostForm.bind(this)}
+                    onClick={this.toggleUpdatePostForm}
                   />
-                  <i
-                    className="fa fa-trash fa-lg"
-                    onClick={() => this.deletePost(this.currentPost().id)}
+                  <DeletePostButton
+                    post={currentPost}
+                    handleDeletePost={this.handleDeletePost}
                   />
                   <i
                     className="fa fa-file fa-lg"
-                    onClick={this.toggleFetchPostForm.bind(this)}
+                    onClick={this.toggleNewPostForm}
                   />
                 </AdminControls>
               ) : null}
-              {this.state.showFetchPostForm ? (
+              {showNewPostForm ? (
                 <NewPostForm
-                  callback={this.updatePosts.bind(this)}
-                  toggle={this.toggleFetchPostForm.bind(this)}
+                  handleCreatePost={this.handleCreatePost}
+                  toggle={this.toggleNewPostForm}
                 />
               ) : null}
-              {this.state.showUpdatePostForm ? (
+              {showUpdatePostForm ? (
                 <UpdatePostForm
-                  toggle={this.toggleUpdatePostForm.bind(this)}
-                  post={this.currentPost()}
-                  callback={this.handlePostUpdate.bind(this)}
+                  toggle={this.toggleUpdatePostForm}
+                  post={currentPost}
+                  handleUpdatePost={this.handleUpdatePost}
                 />
               ) : null}
             </div>

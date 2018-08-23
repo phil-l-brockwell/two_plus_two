@@ -39,12 +39,12 @@ export default class NewPostForm extends React.Component {
 
   send(e) {
     e.preventDefault();
-    const { callback, toggle } = this.props;
+    const { handleCreatePost, toggle } = this.props;
 
     axios
       .post("/api/posts", this.payload())
       .then(response => {
-        callback(response);
+        handleCreatePost(response.data.post);
         toggle();
       })
       .catch(response => {
@@ -70,5 +70,5 @@ export default class NewPostForm extends React.Component {
 
 NewPostForm.propTypes = {
   toggle: PropTypes.func.isRequired,
-  callback: PropTypes.func.isRequired
+  handleCreatePost: PropTypes.func.isRequired
 };

@@ -39,13 +39,13 @@ export default class UpdatePostForm extends React.Component {
 
   send(e) {
     e.preventDefault();
-    const { callback, toggle } = this.props;
+    const { handleUpdatePost, toggle } = this.props;
     const { id } = this.props.post;
 
     axios
       .put(`/api/posts/${id}`, this.payload())
       .then(response => {
-        callback(response);
+        handleUpdatePost(response.data.post);
         toggle();
       })
       .catch(response => {
@@ -72,5 +72,5 @@ export default class UpdatePostForm extends React.Component {
 UpdatePostForm.propTypes = {
   toggle: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired,
-  callback: PropTypes.func.isRequired
+  handleUpdatePost: PropTypes.func.isRequired
 };
