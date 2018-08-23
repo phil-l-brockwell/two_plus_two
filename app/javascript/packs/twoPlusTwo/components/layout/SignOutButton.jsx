@@ -7,10 +7,6 @@ export default class SignOutButton extends React.Component {
   }
 
   handleLogout() {
-    const data = {
-      authenticity_token: document.querySelector('meta[name="csrf-token"]')
-        .content
-    };
     const { updateCurrentUser } = this.props;
 
     fetch("/users/sign_out.json", this.payload())

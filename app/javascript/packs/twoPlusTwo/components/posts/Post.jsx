@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-class Post extends React.Component {
+export default class Post extends React.Component {
   render() {
     const { title, subtitle, text } = this.props.post;
 
@@ -25,5 +25,3 @@ Post.defaultProps = {
 Post.propTypes = {
   post: PropTypes.object
 };
-
-export default Post;

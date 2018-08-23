@@ -1,26 +1,28 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-class Input extends React.Component {
+export default class Input extends React.Component {
   render() {
-    switch (this.props.type) {
+    const { type, name, value, onChange } = this.props;
+
+    switch (type) {
       case "text":
         return (
           <input
             type="text"
-            id={this.props.name}
-            placeholder={`enter ${this.props.name}...`}
-            value={this.props.value}
-            onChange={this.props.onChange}
+            id={name}
+            placeholder={`enter ${name}...`}
+            value={value}
+            onChange={onChange}
           />
         );
       case "textarea":
         return (
           <textarea
-            id={this.props.name}
-            placeholder={`enter ${this.props.name}...`}
-            value={this.props.value}
-            onChange={this.props.onChange}
+            id={name}
+            placeholder={`enter ${name}...`}
+            value={value}
+            onChange={onChange}
             rows="10"
           />
         );
@@ -28,10 +30,10 @@ class Input extends React.Component {
         return (
           <input
             type="password"
-            id={this.props.name}
-            placeholder={`enter ${this.props.name}...`}
-            value={this.props.value}
-            onChange={this.props.onChange}
+            id={name}
+            placeholder={`enter ${name}...`}
+            value={value}
+            onChange={onChange}
           />
         );
     }
@@ -48,5 +50,3 @@ Input.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func
 }
-
-export default Input;

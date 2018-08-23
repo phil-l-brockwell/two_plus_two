@@ -1,9 +1,9 @@
 import React from "react";
 
-class Footer extends React.Component {
+export default class Footer extends React.Component {
   constructor() {
     super();
-    this.socialMediaLinks = [
+    this.linkData = [
       {
         name: "youtube",
         url: "https://www.youtube.com/channel/UCJVckPp2VNERm639Cj8-j7A"
@@ -25,23 +25,19 @@ class Footer extends React.Component {
         url: "https://stackoverflow.com/users/4543415/phil-brockwell"
       },
       {
-        name: 'adn',
+        name: "adn",
         url: "https://andiapp.co"
       }
     ];
   }
 
   render() {
-    return (
-      <footer>
-        {this.socialMediaLinks.map((link, i) => (
-          <a href={link["url"]} key={i}>
-            <i className={`fa fa-${link["name"]} fa-lg`} aria-hidden="true" />
-          </a>
-        ))}
-      </footer>
-    );
+    const links = this.linkData.map((link, i) => (
+      <a href={link.url} key={i}>
+        <i className={`fa fa-${link.name} fa-lg`} aria-hidden="true" />
+      </a>
+    ));
+
+    return <footer>{links}</footer>;
   }
 }
-
-export default Footer;
