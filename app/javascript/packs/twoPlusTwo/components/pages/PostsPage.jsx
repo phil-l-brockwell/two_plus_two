@@ -58,31 +58,23 @@ export default class PostsPage extends React.Component {
   }
 
   handleDeletePost(deletedPostId) {
-    var posts = this.state.posts.slice();
-    const deletedPostIndex = posts.findIndex(post => {
-      return post.id === deletedPostId;
-    });
-
-    posts.splice(deletedPostIndex, 1);
     this.setState(prevState => ({
-      posts: posts
+      posts: prevState.posts.filter(post => post.id !== deletedPostId)
     }));
   }
 
   handleCreatePost(newPost) {
-    var posts = this.state.posts.slice();
-    posts.push(newPost);
-    this.setState({ posts: posts });
+    this.setState(prevState => ({ posts: [...prevState.posts, newPost] }));
   }
 
   handleUpdatePost(updatedPost) {
-    var posts = this.state.posts.slice();
-    const updatedPostIndex = posts.findIndex(post => {
+    const updatedPostIndex = this.state.posts.findIndex(post => {
       return post.id === updatedPost.id;
     });
 
-    posts.splice(updatedPostIndex, 1, updatedPost);
-    this.setState({ posts: posts });
+    this.setState(prevState => {
+      posts: prevState.posts.splice(updatedPostIndex, 1, updatedPost);
+    });
   }
 
   toggleNewPostForm() {
