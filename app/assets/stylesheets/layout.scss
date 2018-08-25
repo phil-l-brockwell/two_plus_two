@@ -163,7 +163,7 @@ footer {
       color: darkred;
     }
 
-    input, textarea {
+    input, textarea, label {
       resize: none;
       height: 80px;
       -webkit-box-shadow: 0 0 0 1000px black inset;
@@ -173,6 +173,7 @@ footer {
       font-size: 18px;
       color: $light-green !important;
       -webkit-text-fill-color: $light-green;
+      cursor: pointer;
 
       &:focus {
         outline: none;

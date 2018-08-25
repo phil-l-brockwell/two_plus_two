@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 
 export default class Input extends React.Component {
@@ -36,17 +36,34 @@ export default class Input extends React.Component {
             onChange={onChange}
           />
         );
+      case "file":
+        var labelText = `Select ${name}`;
+
+        if (value) {
+          labelText += ` - ${value.name}`;
+        }
+
+        return (
+          <Fragment>
+            <label htmlFor={name}>{labelText}</label>
+            <input
+              type="file"
+              id={name}
+              style={{ visibility: "hidden" }}
+              onChange={onChange}
+            />
+          </Fragment>
+        );
     }
   }
 }
 
 Input.defaultProps = {
-  type: 'text'
+  type: "text"
 };
 
 Input.propTypes = {
   type: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string,
   onChange: PropTypes.func
-}
+};
