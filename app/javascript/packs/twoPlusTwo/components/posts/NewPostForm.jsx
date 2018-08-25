@@ -9,11 +9,17 @@ export default class NewPostForm extends React.Component {
       fields: {
         title: "",
         subtitle: "",
-        text: ""
+        text: "",
+        hero_image: ""
       },
       errorMessage: ""
     };
-    this.fieldTypes = { title: "text", subtitle: "text", text: "textarea" };
+    this.fieldTypes = {
+      title: "text",
+      subtitle: "text",
+      text: "textarea",
+      hero_image: "file"
+    };
     this.send = this.send.bind(this);
     this.updateField = this.updateField.bind(this);
   }
@@ -58,23 +64,29 @@ export default class NewPostForm extends React.Component {
   }
 
   updateField(e) {
+    var value = e.target.value;
+
+    if (e.target.files) {
+      value = e.target.files[0];
+    }
+
     this.setState({
       fields: {
         ...this.state.fields,
-        [e.target.id]: e.target.value
+        [e.target.id]: value
       }
     });
   }
 
   payload() {
+    const formData = new FormData();
+    Object.keys(this.state.fields).map(field =>
+      formData.append(`post[${field}]`, this.state.fields[field])
+    );
+
     return {
       method: "POST",
-      body: JSON.stringify({
-        post: this.state.fields
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
+      body: formData
     };
   }
 }
