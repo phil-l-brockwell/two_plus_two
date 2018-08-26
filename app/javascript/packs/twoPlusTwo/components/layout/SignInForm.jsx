@@ -4,16 +4,10 @@ import Form from "./Form";
 export default class SignInForm extends React.Component {
   constructor() {
     super();
-    this.state = {
-      fields: {
-        email: "",
-        password: ""
-      },
-      errorMessage: ""
-    };
+    this.state = { errorMessage: "" };
     this.fieldTypes = { email: "text", password: "password" };
     this.send = this.send.bind(this);
-    this.updateField = this.updateField.bind(this);
+    this.form = React.createRef();
   }
 
   send(e) {
@@ -43,41 +37,36 @@ export default class SignInForm extends React.Component {
 
   render() {
     const { toggle } = this.props;
-    const { fields, errorMessage } = this.state;
-    const fieldTypes = this.fieldTypes;
+    const { errorMessage } = this.state;
 
     return (
       <Form
+        ref={this.form}
         resource="user"
         toggle={toggle}
         errorMessage={errorMessage}
-        fields={fields}
-        fieldTypes={fieldTypes}
-        updateField={this.updateField}
+        fieldTypes={this.fieldTypes}
         send={this.send}
       />
     );
   }
 
   payload() {
+    const fields = this.form.current.fields();
+    const formData = new FormData();
+
+    Object.keys(fields).forEach(field =>
+      formData.append(`user[${field}]`, fields[field])
+    );
+
+    formData.append(
+      "authenticity_token",
+      document.querySelector('meta[name="csrf-token').content
+    );
+
     return {
       method: "POST",
-      body: JSON.stringify({
-        user: this.state.fields,
-        authenticity_token: document.querySelector('meta[name="csrf-token').content
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
+      body: formData
     };
-  }
-
-  updateField(e) {
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        [e.target.id]: e.target.value
-      }
-    });
   }
 }

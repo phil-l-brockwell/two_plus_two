@@ -5,15 +5,7 @@ import Form from "../layout/Form";
 export default class NewPostForm extends React.Component {
   constructor() {
     super();
-    this.state = {
-      fields: {
-        title: "",
-        subtitle: "",
-        text: "",
-        hero_image: ""
-      },
-      errorMessage: ""
-    };
+    this.state = { errorMessage: "" };
     this.fieldTypes = {
       title: "text",
       subtitle: "text",
@@ -21,22 +13,20 @@ export default class NewPostForm extends React.Component {
       hero_image: "file"
     };
     this.send = this.send.bind(this);
-    this.updateField = this.updateField.bind(this);
+    this.form = React.createRef();
   }
 
   render() {
     const { toggle } = this.props;
-    const { fields, errorMessage } = this.state;
-    const fieldTypes = this.fieldTypes;
+    const { errorMessage } = this.state;
 
     return (
       <Form
+        ref={this.form}
         resource="post"
         toggle={toggle}
         errorMessage={errorMessage}
-        fields={fields}
-        fieldTypes={fieldTypes}
-        updateField={this.updateField}
+        fieldTypes={this.fieldTypes}
         send={this.send}
       />
     );
@@ -63,25 +53,12 @@ export default class NewPostForm extends React.Component {
       });
   }
 
-  updateField(e) {
-    var value = e.target.value;
-
-    if (e.target.files) {
-      value = e.target.files[0];
-    }
-
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        [e.target.id]: value
-      }
-    });
-  }
-
   payload() {
+    const fields = this.form.current.fields();
     const formData = new FormData();
-    Object.keys(this.state.fields).map(field =>
-      formData.append(`post[${field}]`, this.state.fields[field])
+
+    Object.keys(fields).forEach(field =>
+      formData.append(`post[${field}]`, fields[field])
     );
 
     return {

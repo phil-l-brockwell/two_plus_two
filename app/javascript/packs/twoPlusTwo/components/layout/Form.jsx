@@ -3,24 +3,24 @@ import PropTypes from "prop-types";
 import Input from "../layout/Input";
 
 export default class Form extends React.Component {
-  render() {
-    const {
-      resource,
-      toggle,
-      errorMessage,
-      send,
-      updateField,
-      fields,
-      fieldTypes
-    } = this.props;
+  constructor(props) {
+    super(props);
+    this.state = {};
+    Object.keys(this.props.fieldTypes).forEach(
+      field => (this.state[field] = this.props.values[field] || "")
+    );
+  }
 
-    const inputs = Object.keys(fields).map((field, i) => (
+  render() {
+    const { resource, toggle, errorMessage, send, fieldTypes } = this.props;
+
+    const inputs = Object.keys(fieldTypes).map((field, i) => (
       <Input
         key={i}
         name={field}
-        value={fields[field]}
+        value={this.state[field]}
         type={fieldTypes[field]}
-        onChange={e => updateField(e)}
+        onChange={e => this.updateField(e)}
       />
     ));
 
@@ -35,14 +35,34 @@ export default class Form extends React.Component {
       </div>
     );
   }
+
+  updateField(e) {
+    var value = e.target.value;
+
+    if (e.target.files) {
+      value = e.target.files[0];
+    }
+
+    this.setState({
+      ...this.state,
+      [e.target.id]: value
+    });
+  }
+
+  fields() {
+    return this.state;
+  }
 }
+
+Form.defaultProps = {
+  values: {}
+};
 
 Form.propTypes = {
   resource: PropTypes.string,
   toggle: PropTypes.func.isRequired,
-  fields: PropTypes.object.isRequired,
+  values: PropTypes.object,
   fieldTypes: PropTypes.object.isRequired,
   errorMessage: PropTypes.string,
-  send: PropTypes.func.isRequired,
-  updateField: PropTypes.func.isRequired
-}
+  send: PropTypes.func.isRequired
+};

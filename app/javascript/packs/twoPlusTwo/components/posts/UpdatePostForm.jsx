@@ -5,33 +5,35 @@ import Form from "../layout/Form";
 export default class UpdatePostForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      fields: {
-        title: this.props.post.title,
-        subtitle: this.props.post.subtitle,
-        text: this.props.post.text
-      },
-      errorMessage: ""
+    this.state = { errorMessage: "" };
+    this.values = {
+      title: this.props.post.title,
+      subtitle: this.props.post.subtitle,
+      text: this.props.post.text
     };
-    this.fieldTypes = { title: "text", subtitle: "text", text: "textarea" };
+    this.fieldTypes = {
+      title: "text",
+      subtitle: "text",
+      text: "textarea",
+      hero_image: "file"
+    };
     this.send = this.send.bind(this);
-    this.updateField = this.updateField.bind(this);
+    this.form = React.createRef();
   }
 
   render() {
     const { toggle } = this.props;
-    const { fields, errorMessage } = this.state;
-    const fieldTypes = this.fieldTypes;
+    const { errorMessage } = this.state;
 
     return (
       <Form
+        ref={this.form}
         resource="post"
         toggle={toggle}
         errorMessage={errorMessage}
-        fields={fields}
-        fieldTypes={fieldTypes}
-        updateField={this.updateField}
+        fieldTypes={this.fieldTypes}
         send={this.send}
+        values={this.values}
       />
     );
   }
@@ -58,24 +60,19 @@ export default class UpdatePostForm extends React.Component {
       });
   }
 
-  updateField(e) {
-    this.setState({
-      fields: {
-        ...this.state.fields,
-        [e.target.id]: e.target.value
+  payload() {
+    const fields = this.form.current.fields();
+    const formData = new FormData();
+
+    Object.keys(fields).forEach(field => {
+      if (fields[field] !== "") {
+        formData.append(`post[${field}]`, fields[field]);
       }
     });
-  }
 
-  payload() {
     return {
       method: "PUT",
-      body: JSON.stringify({
-        post: this.state.fields
-      }),
-      headers: {
-        "Content-Type": "application/json"
-      }
+      body: formData
     };
   }
 }
