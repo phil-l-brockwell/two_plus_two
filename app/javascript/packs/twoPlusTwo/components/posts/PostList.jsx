@@ -9,7 +9,7 @@ export default class PostList extends React.Component {
     return (
       <div className="post-list">
         {posts.map(post => {
-          const { id, title } = post;
+          const { id, title, hero_image } = post;
 
           return (
             <PostListItem
@@ -17,6 +17,7 @@ export default class PostList extends React.Component {
               title={title}
               selected={post === currentPost}
               id={id}
+              backgroundImage={hero_image}
             />
           );
         })}

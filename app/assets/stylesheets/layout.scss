@@ -5,7 +5,7 @@
 }
 
 div.content {
-  margin-top: $header-height;
+  margin-top: $header-height + $post-list-height;
   z-index: 1;
   line-height: 25px;
   letter-spacing: 1px;
@@ -60,7 +60,7 @@ header {
 
 .admin-controls {
   position: absolute;
-  top: $background-height;
+  top: $background-height + $post-list-height;
   left: 0;
   background-color: black;
   width: 100%;

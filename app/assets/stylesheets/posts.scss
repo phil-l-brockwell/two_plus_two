@@ -6,9 +6,9 @@
 
 .post {
   min-height: 1000px;
+  position: relative;
 
   .background {
-    background-image: asset-url("banksy-hero.jpg");
     background-size: cover;
     opacity: 0.4;
     position: fixed;
@@ -21,33 +21,43 @@
     position: absolute;
     width: 100%;
     text-align: center;
-    top: $background-height / 2;
+    top: $background-height * 0.4;
 
     h1, h2 { margin: 0 2px 10px 2px; }
   }
 
   p {
     position: absolute;
-    top: $background-height * 1.2;
+    top: $background-height;
     margin: 0 10%;
   }
 }
 
 .post-list {
-  position: absolute;
+  position: fixed;
   top: $header-height;
   display: flex;
   width: 100%;
   height: $post-list-height;
   line-height: $post-list-height;
+  z-index: 2;
+  background-color: black;
 
   .post-list-item {
     width: 25%;
     cursor: pointer;
-    color: black;
+    color: white;
+    background-size: cover;
+    opacity: 0.5;
+
+    &:hover {
+      transform: scale(1.02);
+      opacity: 1;
+    }
 
     &.current-post-list-item {
       text-decoration: underline;
+      opacity: 1;
     }
   }
 }
