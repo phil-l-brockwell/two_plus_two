@@ -16,7 +16,7 @@ export default class PostListItem extends React.Component {
     }
 
     return (
-      <Link to={`/posts/${id}`} className={className} style={style}>
+      <Link to={`/app/posts/${id}`} className={className} style={style}>
         {title}
       </Link>
     );

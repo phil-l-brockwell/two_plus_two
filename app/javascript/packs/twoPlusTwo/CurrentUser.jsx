@@ -12,7 +12,7 @@ export class CurrentUserProvider extends React.Component {
   }
 
   getCurrentUser() {
-    fetch("/users/current_user")
+    fetch("/api/users/current_user")
       .then(response => {
         if (response.ok) {
           return response.json();

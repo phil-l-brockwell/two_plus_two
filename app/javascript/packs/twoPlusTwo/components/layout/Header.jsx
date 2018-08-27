@@ -23,7 +23,7 @@ export default class Header extends React.Component {
 
           return (
             <header>
-              <Link to="/" className="avatar">
+              <Link to="/app/" className="avatar">
                 <img src={Avatar} />
               </Link>
               <a
@@ -34,7 +34,7 @@ export default class Header extends React.Component {
                 <span className="mobile-hide">phil_brockwell</span>
               </a>
               <div className="header-links">
-                <Link to="/posts" className="button">
+                <Link to="/app/posts" className="button">
                   blog
                 </Link>
                 {user ? (

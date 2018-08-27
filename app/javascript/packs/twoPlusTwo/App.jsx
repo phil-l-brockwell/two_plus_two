@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import PostsPage from "./components/pages/PostsPage";
+import NotFoundPage from "./components/pages/NotFoundPage";
 import { CurrentUserProvider } from "./CurrentUser";
 import Layout from "./components/layout/Layout";
 
@@ -10,9 +11,12 @@ export default class App extends React.Component {
       <CurrentUserProvider>
         <Router>
           <Layout>
-            <Route exact path="/" component={PostsPage} />
-            <Route exact path="/posts" component={PostsPage} />
-            <Route exact path="/posts/:id" component={PostsPage} />
+            <Switch>
+              <Route path="/app/posts/:id" component={PostsPage} />
+              <Route path="/app/posts" component={PostsPage} />
+              <Route exact path="/app/" component={PostsPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
           </Layout>
         </Router>
       </CurrentUserProvider>
