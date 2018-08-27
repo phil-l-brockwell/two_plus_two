@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import Post from "../posts/Post";
 import PostList from "../posts/PostList";
 import UpdatePostForm from "../posts/UpdatePostForm";
@@ -7,7 +7,7 @@ import AdminControls from "../layout/AdminControls";
 import DeletePostButton from "../posts/DeletePostButton";
 import { CurrentUserConsumer } from "../../CurrentUser";
 
-export default class PostsPage extends React.Component {
+export default class PostsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -50,15 +50,15 @@ export default class PostsPage extends React.Component {
 
   currentPost() {
     return (
-      this.state.posts.find(post => {
-        return post.id === this.state.currentPostId;
+      this.state.posts.find(({ id }) => {
+        return id === this.state.currentPostId;
       }) || this.state.posts[0]
     );
   }
 
   handleDeletePost(deletedPostId) {
     this.setState(prevState => ({
-      posts: prevState.posts.filter(post => post.id !== deletedPostId)
+      posts: prevState.posts.filter(({ id }) => id !== deletedPostId)
     }));
   }
 
@@ -67,8 +67,8 @@ export default class PostsPage extends React.Component {
   }
 
   handleUpdatePost(updatedPost) {
-    const updatedPostIndex = this.state.posts.findIndex(post => {
-      return post.id === updatedPost.id;
+    const updatedPostIndex = this.state.posts.findIndex(({ id }) => {
+      return id === updatedPost.id;
     });
 
     this.setState(prevState => {

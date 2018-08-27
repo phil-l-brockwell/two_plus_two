@@ -1,11 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Avatar from "images/avatar.png";
 import SignOutButton from "./SignOutButton";
 import SignInForm from "./SignInForm";
 import { CurrentUserConsumer } from "../../CurrentUser";
 
-export default class Header extends React.Component {
+export default class Header extends Component {
   constructor() {
     super();
     this.state = {

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import DefaultImage from "images/banksy-hero.jpg";
 
-export default class Post extends React.Component {
+export default class Post extends Component {
   render() {
     const { title, subtitle, text, hero_image } = this.props.post;
     const style = { backgroundImage: `url(${hero_image || DefaultImage})` };

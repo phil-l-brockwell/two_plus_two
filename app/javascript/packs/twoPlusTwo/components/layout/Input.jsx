@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, Component } from "react";
 import PropTypes from "prop-types";
 
-export default class Input extends React.Component {
+export default class Input extends Component {
   render() {
     const { type, name, value, onChange } = this.props;
 

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 
 const CurrentUserContext = React.createContext();
 export const CurrentUserConsumer = CurrentUserContext.Consumer;
-export class CurrentUserProvider extends React.Component {
+export class CurrentUserProvider extends Component {
   constructor() {
     super();
     this.state = {

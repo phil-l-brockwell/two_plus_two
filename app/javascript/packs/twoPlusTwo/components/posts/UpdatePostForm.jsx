@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Form from "../layout/Form";
 
-export default class UpdatePostForm extends React.Component {
+export default class UpdatePostForm extends Component {
   constructor(props) {
     super(props);
     this.state = { errorMessage: "" };

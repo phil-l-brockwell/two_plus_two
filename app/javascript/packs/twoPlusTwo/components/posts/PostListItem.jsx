@@ -1,9 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import DefaultImage from "images/banksy-hero.jpg";
 
-export default class PostListItem extends React.Component {
+export default class PostListItem extends Component {
   render() {
     const { title, id, backgroundImage, selected } = this.props;
     const style = {

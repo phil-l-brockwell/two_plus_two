@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 
-export default class SignOutButton extends React.Component {
+export default class SignOutButton extends Component {
   constructor() {
     super();
     this.handleLogout = this.handleLogout.bind(this);

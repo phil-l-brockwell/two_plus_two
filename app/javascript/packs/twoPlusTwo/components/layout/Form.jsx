@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Input from "../layout/Input";
 
-export default class Form extends React.Component {
+export default class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {};

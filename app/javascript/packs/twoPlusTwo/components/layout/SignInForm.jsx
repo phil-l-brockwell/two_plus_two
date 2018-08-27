@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import Form from "./Form";
 
-export default class SignInForm extends React.Component {
+export default class SignInForm extends Component {
   constructor() {
     super();
     this.state = { errorMessage: "" };

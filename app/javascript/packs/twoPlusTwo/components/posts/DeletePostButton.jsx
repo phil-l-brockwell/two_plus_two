@@ -1,7 +1,7 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-export default class DeletePostButton extends React.Component {
+export default class DeletePostButton extends Component {
   constructor() {
     super();
     this.deletePost = this.deletePost.bind(this);

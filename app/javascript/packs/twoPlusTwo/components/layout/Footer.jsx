@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 
-export default class Footer extends React.Component {
+export default class Footer extends Component {
   constructor() {
     super();
     this.linkData = [
@@ -32,9 +32,9 @@ export default class Footer extends React.Component {
   }
 
   render() {
-    const links = this.linkData.map((link, i) => (
-      <a href={link.url} key={i}>
-        <i className={`fa fa-${link.name} fa-lg`} aria-hidden="true" />
+    const links = this.linkData.map(({ name, url }, i) => (
+      <a href={url} key={i}>
+        <i className={`fa fa-${name} fa-lg`} aria-hidden="true" />
       </a>
     ));
 
